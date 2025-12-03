@@ -8,7 +8,7 @@ export default function page() {
             <div>
                 <h1 className='font-inter font-bold text-3xl mb-8   '>Create Account</h1>
                 <RegisterForm />
-                <div className='flex gap-2 mt-3 justify-center'>
+                <div className='flex gap-2 mt-2 justify-center'>
                     <p>Already have an account? </p>
                     <Link href={"/login"} className='text-blue-600 font-medium'>Login</Link>
                 </div>
