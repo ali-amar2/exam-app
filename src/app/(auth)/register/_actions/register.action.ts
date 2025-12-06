@@ -4,7 +4,7 @@ import { ApiResponse } from "@/lib/types/api"
 
 export async function registerAction(data: registerValues) {
     try {
-        const response = await fetch(`${process.env.API_URL}/auth/signup`, {
+        const response = await fetch(`${process.env.API}/auth/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

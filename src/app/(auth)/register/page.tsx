@@ -4,8 +4,8 @@ import Link from 'next/link'
 
 export default function page() {
     return <>
-        <main className='py-[5rem] px-[8.1875rem]'>
-            <div>
+        <main className='flex justify-center w-full items-center py-10'>
+            <div className='w-full px-32'>
                 <h1 className='font-inter font-bold text-3xl mb-8   '>Create Account</h1>
                 <RegisterForm />
                 <div className='flex gap-2 mt-2 justify-center'>
