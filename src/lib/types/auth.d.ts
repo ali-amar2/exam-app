@@ -31,3 +31,8 @@ declare module "next-auth/jwt" {
         accesstoken: string;
     }
 }
+
+export type ResetPasswordPayload = {
+    email: string;
+    newPassword: string;
+};
