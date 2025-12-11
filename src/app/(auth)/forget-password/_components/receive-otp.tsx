@@ -111,7 +111,6 @@ export default function ReceiveOtp({ email, onSuccess, onBack }: { email: string
                             </FormItem>
                         )}
                     />
-
                     {counter > 0 ? (
                         <p className="text-gray-500 flex justify-center">
                             You can request another code in: <span className="font-semibold">{counter}s</span>

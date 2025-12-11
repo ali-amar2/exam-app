@@ -12,6 +12,8 @@ export const authOptions: NextAuthOptions = {
             },
 
             authorize: async (credentials) => {
+                console.log("AUTHORIZE STARTED!!");
+
                 const response = await fetch(`${process.env.API}/auth/signin`, {
                     method: "POST",
                     body: JSON.stringify({
@@ -24,6 +26,8 @@ export const authOptions: NextAuthOptions = {
                 });
 
                 const payload: ApiResponse = await response.json();
+                console.log("API RESPONSE:", payload);  // ← أهم واحدة
+
 
                 if ("code" in payload) {
                     throw new Error(payload.message);
