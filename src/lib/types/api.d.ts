@@ -1,5 +1,12 @@
 import { User } from "./user";
 
+declare type DatabaseProperties = {
+    _id: string;
+    createdAt: string;
+    updatedAt?: string;
+    passwordChangedAt?: string;
+};
+
 declare type SuccessResponse = {
     message: "success";
     token: string;

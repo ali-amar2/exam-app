@@ -6,14 +6,19 @@ import { Timer } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+/* FIXME:
+   "get Exams on subject" endpoint returns an empty array.
+   Using the "get all exams" endpoint as a temporary workaround,
+   which results in the same exams data being returned for all subjects.
+*/
+
 export default function FetchExams() {
 
     const pathname = usePathname();
 
     const { data, isLoading, isError } = useExam();
-    console.log(data);
 
-    if (isLoading) {
+    if (isLoading || !data?.exams) {
         return (
             <div className="flex items-center justify-center h-[31rem]">
                 <Loading />
@@ -30,6 +35,7 @@ export default function FetchExams() {
             </div>
         );
     }
+
     return (
         <div className="flex flex-col py-2 gap-4 my-2">
             {data.exams.map((exam: Exam) => (
@@ -46,11 +52,12 @@ export default function FetchExams() {
                         <p className="text-gray-800 flex gap-2 text-sm items-center">
                             <Timer className="text-gray-500" />
                             Duration: {exam.duration + " Minutes"}
-
                         </p>
                     </div>
                 </Link>
             ))}
+            <span className="text-gray-500 m-auto text-sm">End of list</span>
         </div>
+
     );
 }

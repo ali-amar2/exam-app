@@ -1,5 +1,5 @@
 "use client"
-import { ArrowLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 type PageTitleProps = {
@@ -13,7 +13,7 @@ export default function Title({ title, icon }: PageTitleProps) {
     return (
         <div className="flex gap-3 h-20">
             {pathname !== "/" ? (
-                <div className="flex justify-center items-center border-2 border-blue-500 cursor-pointer w-8 bg-white" onClick={() => router.back()}><ArrowLeft className="text-blue-500" /></div>
+                <div className="flex justify-center items-center border-2 border-blue-500 cursor-pointer w-8 bg-white" onClick={() => router.back()}><ChevronLeft className="text-blue-500" /></div>
             ) : ""}
             <div className="w-full bg-blue-600 font-medium text-white px-6 py-3 flex items-center gap-3">
                 {icon && (

@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 
     } catch (error) {
         return NextResponse.json(
-            { code: 500, message: "Internal server error" },
+            { code: 500, message: "server error" },
         );
     }
 

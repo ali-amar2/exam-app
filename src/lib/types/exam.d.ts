@@ -17,3 +17,4 @@ export type ExamsResponse = {
     };
     exams: Exam[];
 };
+type ExamMode = "questions" | "results";

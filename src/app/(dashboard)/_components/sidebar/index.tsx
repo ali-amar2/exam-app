@@ -24,7 +24,7 @@ export default async function Sidebar() {
                 <SidebarLinks />
             </div>
             <div className="flex gap-2 justify-center items-center">
-                <div className="w-12 border overflow-hidden border-blue-600">
+                <div className="w-11 h-11 border overflow-hidden border-blue-600">
                     <Image src={user} alt="Uesr Photo" className="w-full"></Image>
                 </div>
                 <div className="flex flex-col text-sm">
