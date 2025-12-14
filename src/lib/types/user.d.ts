@@ -9,3 +9,10 @@ declare type User = {
     isVerified: boolean;
     createdAt: string;
 };
+declare type AccountUser = {
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+    phone: string;
+};

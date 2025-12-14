@@ -15,7 +15,7 @@ const chartConfig: ChartConfig = {
     },
     correct: {
         label: "Correct",
-        color: "#22c55e",
+        color: "#10b981",
     },
     incorrect: {
         label: "Incorrect",
@@ -38,7 +38,7 @@ export default function ExamResultChart({
         ];
 
     return (
-        <Card className="relative w-[260px]">
+        <Card className="w-[300px]">
             <CardContent className="p-4">
                 <ChartContainer
                     config={chartConfig}
@@ -61,13 +61,17 @@ export default function ExamResultChart({
                 </ChartContainer>
 
                 {/* Center Text */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-2xl font-bold text-blue-600">
-                        {correct}/{total}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                        Correct
-                    </span>
+                <div className="inset-0 flex flex-col gap-2 items-center justify-center mt-2">
+                    <div className="flex flex-col items-baseline gap-2">
+                        <div className="flex justify-center items-center gap-2">
+                            <span className="w-4 h-4 bg-emerald-500 px-2"></span>
+                            <span>Correct: {correct}</span>
+                        </div>
+                        <div className="flex justify-center items-center gap-2">
+                            <span className="w-4 h-4 bg-red-500 px-2"></span>
+                            <span>InCorrect: {total - correct}</span>
+                        </div>
+                    </div>
                 </div>
             </CardContent>
         </Card>

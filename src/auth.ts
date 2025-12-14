@@ -3,6 +3,10 @@ import Credentials from "next-auth/providers/credentials";
 import { ApiResponse } from "./lib/types/api";
 
 export const authOptions: NextAuthOptions = {
+    session: {
+        strategy: "jwt",
+    },
+
     providers: [
         Credentials({
             name: "Credentials",
@@ -12,8 +16,6 @@ export const authOptions: NextAuthOptions = {
             },
 
             authorize: async (credentials) => {
-                console.log("AUTHORIZE STARTED!!");
-
                 const response = await fetch(`${process.env.API}/auth/signin`, {
                     method: "POST",
                     body: JSON.stringify({
@@ -26,30 +28,32 @@ export const authOptions: NextAuthOptions = {
                 });
 
                 const payload: ApiResponse = await response.json();
-                console.log("API RESPONSE:", payload);  // ← أهم واحدة
-
 
                 if ("code" in payload) {
                     throw new Error(payload.message);
                 }
-                return {
-                    id: payload.user._id,
-                    accesstoken: payload.token,
-                    ...payload.user
-                };
 
+                return {
+                    _id: payload.user._id,
+                    accesstoken: payload.token,
+                    ...payload.user,
+                };
             },
         }),
     ],
 
     callbacks: {
-        jwt: ({ token, user }) => {
+        async jwt({ token, user, trigger, session }) {
             if (user) {
+                token = { ...token, ...user };
+            }
+            if (trigger === "update" && session) {
                 token = {
                     ...token,
-                    ...user,
+                    ...session,
                 };
             }
+
             return token;
         },
 
@@ -63,9 +67,7 @@ export const authOptions: NextAuthOptions = {
             session.user.role = token.role;
             session.user.isVerified = token.isVerified;
             session.user.createdAt = token.createdAt;
-
             return session;
         }
-    }
-
-}
+    },
+};

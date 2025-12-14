@@ -106,7 +106,7 @@ export default function FetchQuestions() {
 
                 <div className="flex gap-6">
                     <ExamResultChart correct={correctCount} incorrect={incorrectCount} total={questions.length} />
-                    <div className="flex-1 overflow-y-auto pr-2 space-y-4 border-t pt-4 h-[calc(100vh-6rem)]">
+                    <div className="flex-1 overflow-y-auto pr-2 space-y-4 border-t pt-4 h-[calc(100vh-20rem)]">
                         {questions.map((q: Question, idx: number) => (
                             <div key={q._id} className="p-4 rounded space-y-2">
                                 <h3 className="font-semibold text-blue-600">
