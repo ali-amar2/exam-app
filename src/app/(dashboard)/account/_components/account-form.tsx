@@ -13,6 +13,7 @@ import { useEditProfile } from "../_hooks/use-edit-profile";
 import { useUserData } from "../_hooks/use-user-data";
 import ErrorBox from "@/components/ui/error-box";
 import { useToast } from "@/hooks/use-toast";
+import Loading from "@/app/loading";
 
 export default function AccountForm() {
 
@@ -56,8 +57,8 @@ export default function AccountForm() {
 
     if (isUserLoading) {
         return (
-            <div className="flex items-center justify-center h-[300px]">
-                <Loader className="animate-spin" />
+            <div className="flex items-center justify-center h-[25rem] w-full">
+                <Loading />
             </div>
         );
     }
@@ -83,7 +84,6 @@ export default function AccountForm() {
                             </FormItem>
                         )}
                     />
-
                     <FormField
                         control={form.control}
                         name="lastName"
