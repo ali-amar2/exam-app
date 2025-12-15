@@ -7,8 +7,8 @@ export default function AccountLayout({ children, }: { children: React.ReactNode
             <Title title="Account Settings" icon={<User className="h-full w-full" />} />
             <div className="flex mt-4 gap-5 flex-1">
                 <AccountSidebar />
-                <main className="flex-1 ">{children}</main>
+                <main className="flex-1 bg-white p-3 text-gray-800">{children}</main>
             </div>
-        </div>
+        </div >
     );
 }

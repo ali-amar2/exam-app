@@ -16,14 +16,10 @@ import { useDeleteAccount } from "../_hooks/use-delete-acc";
 
 export default function DeleteAccountDialog() {
     const { mutate: deleteAccount, isPending } = useDeleteAccount();
-
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button
-                    type="button"
-                    className="bg-red-50 text-red-600 flex-1 hover:bg-red-100"
-                >
+                <Button type="button" className="bg-red-50 text-red-600 flex-1 hover:bg-red-100">
                     Delete My Account
                 </Button>
             </AlertDialogTrigger>
@@ -51,18 +47,11 @@ export default function DeleteAccountDialog() {
 
                 {/* Actions */}
                 <AlertDialogFooter className="gap-4">
-                    <AlertDialogCancel
-                        disabled={isPending}
-                        className="w-52 border-none"
-                    >
+                    <AlertDialogCancel disabled={isPending} className="w-52 border-none">
                         Cancel
                     </AlertDialogCancel>
 
-                    <AlertDialogAction
-                        onClick={() => deleteAccount()}
-                        disabled={isPending}
-                        className="bg-red-600 hover:bg-red-700 w-52"
-                    >
+                    <AlertDialogAction onClick={() => deleteAccount()} disabled={isPending} className="bg-red-600 hover:bg-red-700 w-52">
                         {isPending ? "Deleting..." : "Yes, Delete"}
                     </AlertDialogAction>
                 </AlertDialogFooter>

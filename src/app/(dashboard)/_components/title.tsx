@@ -2,11 +2,6 @@
 import { ChevronLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
-type PageTitleProps = {
-    title: String;
-    icon: React.ReactNode;
-};
-
 export default function Title({ title, icon }: PageTitleProps) {
     const pathname = usePathname()
     const router = useRouter()

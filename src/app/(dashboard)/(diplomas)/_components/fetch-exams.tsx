@@ -15,7 +15,6 @@ import { usePathname } from "next/navigation";
 export default function FetchExams() {
 
     const pathname = usePathname();
-
     const { data, isLoading, isError } = useExam();
 
     if (isLoading || !data?.exams) {

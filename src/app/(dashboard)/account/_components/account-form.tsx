@@ -60,10 +60,9 @@ export default function AccountForm({ user }: { user: AccountUser }) {
 
     return (
         <Form {...form}>
-            <form
-                className="flex flex-col gap-4 w-full bg-white p-3 h-full text-gray-800"
-                onSubmit={form.handleSubmit(onSubmit)}
-            >
+            <form className="flex flex-col gap-4 w-full " onSubmit={form.handleSubmit(onSubmit)}>
+
+                {/* First & Last Name */}
                 <div className="flex gap-4">
                     <FormField
                         control={form.control}
@@ -72,16 +71,12 @@ export default function AccountForm({ user }: { user: AccountUser }) {
                             <FormItem className="w-full">
                                 <FormLabel>First name</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        {...field}
-                                        error={!!form.formState.errors.firstName}
-                                    />
+                                    <Input {...field} error={!!form.formState.errors.firstName} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-
                     <FormField
                         control={form.control}
                         name="lastName"
@@ -89,10 +84,7 @@ export default function AccountForm({ user }: { user: AccountUser }) {
                             <FormItem className="w-full">
                                 <FormLabel>Last name</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        {...field}
-                                        error={!!form.formState.errors.lastName}
-                                    />
+                                    <Input {...field} error={!!form.formState.errors.lastName} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -108,11 +100,7 @@ export default function AccountForm({ user }: { user: AccountUser }) {
                         <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input
-                                    {...field}
-                                    autoComplete="new-username"
-                                    error={!!form.formState.errors.username}
-                                />
+                                <Input {...field} autoComplete="new-username" error={!!form.formState.errors.username} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -127,11 +115,7 @@ export default function AccountForm({ user }: { user: AccountUser }) {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input
-                                    {...field}
-                                    type="email"
-                                    error={!!form.formState.errors.email}
-                                />
+                                <Input {...field} type="email" error={!!form.formState.errors.email} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -162,22 +146,16 @@ export default function AccountForm({ user }: { user: AccountUser }) {
                     )}
                 />
 
-                {/* Submit */}
+                {/* Backend Error message Box */}
                 {isError && <ErrorBox message={error.message} />}
 
                 <div className="flex w-full gap-4 mt-4">
                     <DeleteAccountDialog />
-
+                    {/* Save Changes */}
                     <Button type="submit" className="flex-1" disabled={isPending}>
-                        {form.formState.isSubmitting ? (
-                            <Loader className="animate-spin" />
-                        ) : (
-                            "Save Changes"
-                        )}
-
+                        {form.formState.isSubmitting ? (<Loader className="animate-spin" />) : ("Save Changes")}
                     </Button>
                 </div>
-
             </form>
         </Form>
     );
