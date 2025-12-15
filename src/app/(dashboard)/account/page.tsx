@@ -1,3 +1,4 @@
+// app/account/page.tsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
@@ -14,24 +15,15 @@ export const metadata: Metadata = {
 };
 
 export default async function AccountPage() {
-
     const session = await getServerSession(authOptions);
+
     if (!session) {
         redirect("/login");
     }
 
-    const user = {
-        firstName: session.user.firstName ?? "",
-        lastName: session.user.lastName ?? "",
-        username: session.user.username ?? "",
-        email: session.user.email ?? "",
-        phone: session.user.phone ?? "",
-    };
-    console.log(session.user.firstName);
-
     return (
         <div className="flex h-full">
-            <AccountForm user={user} />
+            <AccountForm />
         </div>
     );
 }

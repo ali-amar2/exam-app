@@ -16,3 +16,11 @@ declare type AccountUser = {
     email: string;
     phone: string;
 };
+
+declare type MeResponse = {
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+    phone: string;
+};
