@@ -1,7 +1,7 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
     try {
         const token = await getToken({ req });
 
@@ -14,10 +14,10 @@ export async function PUT(req: NextRequest) {
 
         const body = await req.json();
 
-        const res = await fetch(
-            `${process.env.API}/auth/editProfile`,
+        const response = await fetch(
+            `${process.env.API}/auth/changePassword`,
             {
-                method: "PUT",
+                method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                     token: token.accesstoken,
@@ -26,16 +26,17 @@ export async function PUT(req: NextRequest) {
             }
         );
 
-        const data = await res.json();
+        const payload = await response.json();
 
-        if (!res.ok) {
+        if (!response.ok) {
             return NextResponse.json(
-                { message: data.message || "Update failed" },
-                { status: res.status }
+                { message: payload.message || "Change password failed" },
+                { status: response.status }
             );
         }
 
-        return NextResponse.json(data);
+        return NextResponse.json(payload);
+
     } catch (error) {
         return NextResponse.json(
             { message: "Server Error" },

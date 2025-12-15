@@ -11,11 +11,13 @@ import DeleteAccountDialog from "./alert-dialog";
 import { useEditProfile } from "../_hooks/use-edit-profile";
 import ErrorBox from "@/components/ui/error-box";
 import { useSession } from "next-auth/react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AccountForm({ user }: { user: AccountUser }) {
 
     const { mutate: editProfile, isPending, isError, error, } = useEditProfile();
     const { update } = useSession();
+    const { toast } = useToast();
 
     const EditPhoneInput = (phone: string) =>
         phone.startsWith("0") ? "+20" + phone.slice(1) : phone;
@@ -33,6 +35,10 @@ export default function AccountForm({ user }: { user: AccountUser }) {
     const onSubmit: SubmitHandler<accountValues> = (values) => {
         editProfile(values, {
             onSuccess: async (data) => {
+                toast({
+                    title: "Your Profile Updated successfully",
+                    duration: 3000,
+                });
                 form.reset({
                     firstName: data.user.firstName,
                     lastName: data.user.lastName,

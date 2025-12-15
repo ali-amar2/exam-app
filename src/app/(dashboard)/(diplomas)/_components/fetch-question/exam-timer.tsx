@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pie, PieChart } from "recharts";
 
 export type ExamTimerChartProps = {
@@ -12,20 +12,34 @@ export default function ExamTimerChart({
     onTimeEnd,
 }: ExamTimerChartProps) {
     const totalSeconds = durationMinutes * 60;
+    const startTimeRef = useRef<number>(Date.now());
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
     const [timeLeft, setTimeLeft] = useState(totalSeconds);
 
     useEffect(() => {
-        if (timeLeft <= 0) {
-            onTimeEnd();
-            return;
-        }
+        intervalRef.current = setInterval(() => {
+            const elapsedSeconds = Math.floor(
+                (Date.now() - startTimeRef.current) / 1000
+            );
 
-        const interval = setInterval(() => {
-            setTimeLeft((t) => t - 1);
+            const remaining = totalSeconds - elapsedSeconds;
+
+            if (remaining <= 0) {
+                setTimeLeft(0);
+                clearInterval(intervalRef.current!);
+                onTimeEnd();
+            } else {
+                setTimeLeft(remaining);
+            }
         }, 1000);
 
-        return () => clearInterval(interval);
-    }, [timeLeft, onTimeEnd]);
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, [onTimeEnd, totalSeconds]);
 
     const progress = (timeLeft / totalSeconds) * 100;
     const minutes = Math.floor(timeLeft / 60);

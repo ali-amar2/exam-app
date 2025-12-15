@@ -1,6 +1,8 @@
+import ChangePasswordForm from "../_components/change-password-form";
 
 export default function ChangePassword() {
+
     return (
-        <div className="bg-white">change password</div>
+        <ChangePasswordForm />
     )
 }
