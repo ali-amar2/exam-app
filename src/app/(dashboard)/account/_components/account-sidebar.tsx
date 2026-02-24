@@ -58,7 +58,7 @@ export default function AccountSidebar() {
           <Link
             href="/account"
             className={cn(
-              " flex gap-4 justify-center items-center flex-1 text-center p-2",
+              " flex gap-4 justify-center items-center flex-1 text-center p-2 text-sm lg:text-base",
               pathname === "/account"
                 ? "text-blue-500 border-b-2 border-blue-500"
                 : "text-gray-500",
@@ -70,7 +70,7 @@ export default function AccountSidebar() {
           <Link
             href="/account/change-password"
             className={cn(
-              " flex gap-4 justify-center items-center flex-1 text-center p-2",
+              " flex gap-4 justify-center items-center flex-1 text-center p-2 text-sm lg:text-base",
               pathname === "/account/change-password"
                 ? "text-blue-500 border-b-2 border-blue-500"
                 : "text-gray-500",

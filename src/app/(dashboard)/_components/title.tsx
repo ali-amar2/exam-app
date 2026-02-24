@@ -21,7 +21,7 @@ export default function Title({ title, icon }: PageTitleProps) {
         {icon && (
           <div className="flexitems-center justify-center w-9 h-9">{icon}</div>
         )}
-        <h1 className="text-3xl font-inter">{title}</h1>
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-inter">{title}</h1>
       </div>
     </div>
   );

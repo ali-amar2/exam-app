@@ -12,7 +12,7 @@ export default function SidebarLinks() {
 
     return `flex gap-3 text-lg p-4 w-full ${
       isActive
-        ? "border border-blue-500 bg-blue-100 text-blue-500"
+        ? "border border-blue-500 bg-blue-100 text-blue-500 w-[98%]"
         : "text-gray-600"
     }`;
   };

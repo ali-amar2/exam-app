@@ -1,22 +1,3 @@
-// import Header from "./_components/header";
-// import Sidebar from "./_components/sidebar";
-
-// export default function Layout({
-//   children,
-// }: Readonly<{ children: React.ReactNode }>) {
-//   return (
-//     <>
-//       <div className="flex">
-//         <Sidebar />
-//         <div className="flex flex-col w-full bg-white ml-[23rem]">
-//           <Header />
-//           <div className="min-h-[calc(100vh-48px)] p-3">{children}</div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
-
 import Header from "./_components/header";
 import Sidebar from "./_components/sidebar";
 import { ChevronRight, Menu } from "lucide-react";
@@ -24,7 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen">
       {/* Desktop Sidebar */}
       <div className="hidden md:block w-80">
         <Sidebar />
