@@ -6,7 +6,7 @@ export default function page() {
   return (
     <>
       <main className="flex justify-center w-full items-center py-10">
-        <div className="w-full px-14">
+        <div className="w-full px-4 md:px-8 lg:px-14">
           <h1 className="font-inter font-bold text-3xl mb-8">Create Account</h1>
           <RegisterForm />
           <div className="flex gap-2 justify-center flex-wrap ">
