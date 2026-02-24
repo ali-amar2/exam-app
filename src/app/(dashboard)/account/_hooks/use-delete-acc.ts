@@ -4,15 +4,15 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export function useDeleteAccount() {
-    const queryClient = useQueryClient();
-    const router = useRouter();
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
-    return useMutation({
-        mutationFn: deleteMyAccount,
-        onSuccess: async () => {
-            queryClient.clear();
-            await signOut({ redirect: false });
-            router.replace("/login");
-        },
-    });
+  return useMutation({
+    mutationFn: deleteMyAccount,
+    onSuccess: async () => {
+      queryClient.clear();
+      await signOut({ redirect: false });
+      router.replace("/login");
+    },
+  });
 }

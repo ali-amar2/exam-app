@@ -1,4 +1,4 @@
 declare type PageTitleProps = {
-    title: String;
-    icon: React.ReactNode;
+  title: String;
+  icon: React.ReactNode;
 };

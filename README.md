@@ -1,14 +1,16 @@
 # 📝 Exam App
 
-A modern **Exam / Quiz web application** built with **Next.js App Router**, **NextAuth**, **React Query**, and **TailwindCSS**.
+A modern, scalable Exam / Quiz web application built with Next.js App Router and a full authentication system using NextAuth.
+Designed with performance, security, and user experience in mind.
 
-The app allows users to:
+## ✨ Features
 
-- Authenticate securely
-- Take timed exams
-- Answer questions step-by-step
-- View detailed results
-- Manage account (edit profile, change password, delete account)
+- Secure authentication system
+- Timed exam sessions
+- Step-by-step question navigation
+- Detailed exam results with charts
+- Account management (edit profile, change password, delete account)
+- Fully responsive design (Desktop / Tablet / Mobile)
 
 ---
 
@@ -54,5 +56,5 @@ The app allows users to:
 
 ## 📌 Future Improvements
 
-- Make the application fully **responsive** across all devices
-- Support multiple languages
+- Multi-language support (i18n)
+- Dark mode support

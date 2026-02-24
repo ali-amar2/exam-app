@@ -1,11 +1,11 @@
 export async function deleteMyAccount() {
-    const res = await fetch("/api/delete-me", {
-        method: "DELETE",
-    });
+  const res = await fetch("/api/delete-me", {
+    method: "DELETE",
+  });
 
-    if (!res.ok) {
-        throw new Error("Failed to delete account");
-    }
+  if (!res.ok) {
+    throw new Error("Failed to delete account");
+  }
 
-    return res.json();
+  return res.json();
 }

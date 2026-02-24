@@ -3,88 +3,87 @@ import Credentials from "next-auth/providers/credentials";
 import { ApiResponse } from "./lib/types/api";
 
 export const authOptions: NextAuthOptions = {
-    session: {
-        strategy: "jwt",
+  session: {
+    strategy: "jwt",
+  },
+  cookies: {
+    sessionToken: {
+      name:
+        process.env.NODE_ENV === "production"
+          ? "__Secure-next-auth.session-token"
+          : "next-auth.session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
     },
-    cookies: {
-        sessionToken: {
-            name:
-                process.env.NODE_ENV === "production"
-                    ? "__Secure-next-auth.session-token"
-                    : "next-auth.session-token",
-            options: {
-                httpOnly: true,
-                sameSite: "lax",
-                path: "/",
-                secure: process.env.NODE_ENV === "production",
-            },
-        },
-    },
+  },
 
-    providers: [
-        Credentials({
-            name: "Credentials",
-            credentials: {
-                email: {},
-                password: {},
-            },
+  providers: [
+    Credentials({
+      name: "Credentials",
+      credentials: {
+        email: {},
+        password: {},
+      },
 
-            authorize: async (credentials) => {
-                const response = await fetch(`${process.env.API}/auth/signin`, {
-                    method: "POST",
-                    body: JSON.stringify({
-                        email: credentials?.email,
-                        password: credentials?.password,
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
+      authorize: async (credentials) => {
+        const response = await fetch(`${process.env.API}/auth/signin`, {
+          method: "POST",
+          body: JSON.stringify({
+            email: credentials?.email,
+            password: credentials?.password,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-                const payload: ApiResponse = await response.json();
+        const payload: ApiResponse = await response.json();
 
-                if ("code" in payload) {
-                    throw new Error(payload.message);
-                }
-
-                return {
-                    _id: payload.user._id,
-                    accesstoken: payload.token,
-                    ...payload.user,
-                };
-            },
-        }),
-    ],
-    secret: process.env.NEXTAUTH_SECRET,
-
-    callbacks: {
-        async jwt({ token, user, trigger, session }) {
-            if (user) {
-                token = { ...token, ...user };
-            }
-
-            if (trigger === "update" && session?.user) {
-                token = {
-                    ...token,
-                    ...session.user,
-                };
-            }
-
-
-            return token;
-        },
-
-        session: ({ session, token }) => {
-            session.user._id = token._id;
-            session.user.firstName = token.firstName;
-            session.user.lastName = token.lastName;
-            session.user.username = token.username;
-            session.user.email = token.email || "";
-            session.user.phone = token.phone;
-            session.user.role = token.role;
-            session.user.isVerified = token.isVerified;
-            session.user.createdAt = token.createdAt;
-            return session;
+        if ("code" in payload) {
+          throw new Error(payload.message);
         }
+
+        return {
+          _id: payload.user._id,
+          accesstoken: payload.token,
+          ...payload.user,
+        };
+      },
+    }),
+  ],
+  secret: process.env.NEXTAUTH_SECRET,
+
+  callbacks: {
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token = { ...token, ...user };
+      }
+
+      if (trigger === "update" && session?.user) {
+        token = {
+          ...token,
+          ...session.user,
+        };
+      }
+
+      return token;
     },
+
+    session: ({ session, token }) => {
+      session.user._id = token._id;
+      session.user.firstName = token.firstName;
+      session.user.lastName = token.lastName;
+      session.user.username = token.username;
+      session.user.email = token.email || "";
+      session.user.phone = token.phone;
+      session.user.role = token.role;
+      session.user.isVerified = token.isVerified;
+      session.user.createdAt = token.createdAt;
+      return session;
+    },
+  },
 };

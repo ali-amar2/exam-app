@@ -1,7 +1,7 @@
-"use client"
-import * as React from "react"
-import { OTPInput, OTPInputContext } from "input-otp"
-import { cn } from "@/lib/utils/tailwind-merge"
+"use client";
+import * as React from "react";
+import { OTPInput, OTPInputContext } from "input-otp";
+import { cn } from "@/lib/utils/tailwind-merge";
 
 const InputOTP = React.forwardRef<
   React.ElementRef<typeof OTPInput>,
@@ -11,28 +11,32 @@ const InputOTP = React.forwardRef<
     ref={ref}
     containerClassName={cn(
       "flex items-center gap-5 has-[:disabled]:opacity-50",
-      containerClassName
+      containerClassName,
     )}
     className={cn("disabled:cursor-not-allowed", className)}
     {...props}
   />
-))
-InputOTP.displayName = "InputOTP"
+));
+InputOTP.displayName = "InputOTP";
 
 const InputOTPGroup = React.forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div">
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("flex items-center gap-5", className)} {...props} />
-))
-InputOTPGroup.displayName = "InputOTPGroup"
+  <div
+    ref={ref}
+    className={cn("flex items-center gap-5", className)}
+    {...props}
+  />
+));
+InputOTPGroup.displayName = "InputOTPGroup";
 
 const InputOTPSlot = React.forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div"> & { index: number }
 >(({ index, className, ...props }, ref) => {
-  const inputOTPContext = React.useContext(OTPInputContext)
-  const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index]
+  const inputOTPContext = React.useContext(OTPInputContext);
+  const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index];
 
   return (
     <div
@@ -40,7 +44,7 @@ const InputOTPSlot = React.forwardRef<
       className={cn(
         "relative flex h-10 w-10 items-center justify-center border border-gray-300 text-md transition-all",
         isActive && "z-10  text-blue-600 border-2 border-blue-600",
-        className
+        className,
       )}
       {...props}
     >
@@ -51,8 +55,8 @@ const InputOTPSlot = React.forwardRef<
         </div>
       )}
     </div>
-  )
-})
-InputOTPSlot.displayName = "InputOTPSlot"
+  );
+});
+InputOTPSlot.displayName = "InputOTPSlot";
 
-export { InputOTP, InputOTPGroup, InputOTPSlot }
+export { InputOTP, InputOTPGroup, InputOTPSlot };
