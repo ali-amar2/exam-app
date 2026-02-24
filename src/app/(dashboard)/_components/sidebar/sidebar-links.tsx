@@ -10,7 +10,7 @@ export default function SidebarLinks() {
     const isActive =
       href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-    return `flex gap-3 text-lg p-4 w-full ${
+    return `flex gap-3 text-lg p-4 ${
       isActive
         ? "border border-blue-500 bg-blue-100 text-blue-500 w-[98%]"
         : "text-gray-600"
