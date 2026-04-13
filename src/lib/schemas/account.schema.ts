@@ -34,33 +34,33 @@ export const accountSchema = z.object({
 
 export const changePasswordSchema = z
   .object({
-    oldPassword: z
+    currentPassword: z
       .string()
       .nonempty("Old password is required")
       .regex(
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
         "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
       ),
-    password: z
+    newPassword: z
       .string()
       .nonempty("New password is required")
       .regex(
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
         "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
       ),
-    rePassword: z.string().nonempty("Please confirm your new password"),
+    confirmPassword: z.string().nonempty("Please confirm your new password"),
   })
   .superRefine((data, ctx) => {
-    if (data.oldPassword === data.password) {
+    if (data.currentPassword === data.newPassword) {
       ctx.addIssue({
         path: ["password"],
         message: "New password must be different from old password",
         code: z.ZodIssueCode.custom,
       });
     }
-    if (data.password !== data.rePassword) {
+    if (data.newPassword !== data.confirmPassword) {
       ctx.addIssue({
-        path: ["rePassword"],
+        path: ["confirmPassword"],
         message: "Passwords do not match",
         code: z.ZodIssueCode.custom,
       });

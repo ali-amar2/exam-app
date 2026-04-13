@@ -1,33 +1,36 @@
 "use server";
+
 import { registerValues } from "@/lib/schemas/auth.schema";
-import { ApiResponse } from "@/lib/types/api";
+import { ApiResponse, SuccessResponse } from "@/lib/types/api";
 
 export async function registerAction(data: registerValues) {
   try {
-    const response = await fetch(`${process.env.API}/auth/signup`, {
+    const response = await fetch(`${process.env.API}/auth/register`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+
     const payload: ApiResponse = await response.json();
 
-    if ("code" in payload) {
-      return {
-        message: payload.message,
-        code: payload.code,
-      };
+    if (!response.ok || !payload.status) {
+      throw new Error(
+        payload.message || "Registration failed. Please try again.",
+      );
     }
+
+    const successPayload = payload as SuccessResponse;
+
     return {
-      message: payload.message,
-      token: payload.token,
-      user: payload.user,
+      message: successPayload.message,
+      token: successPayload.token,
+      user: successPayload.user,
     };
-  } catch (error) {
-    return {
-      message: error instanceof Error ? error.message : "Something went wrong.",
-      code: 409,
-    };
+  } catch (error: any) {
+    throw new Error(
+      error.message?.includes("Network")
+        ? "Cannot connect to server. Please check your internet connection."
+        : error.message || "Something went wrong. Please try again.",
+    );
   }
 }

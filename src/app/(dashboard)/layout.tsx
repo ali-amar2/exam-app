@@ -1,22 +1,33 @@
-import Header from "./_components/header";
-import Sidebar from "./_components/sidebar";
-import { ChevronRight, Menu } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Sidebar from "@/components/layout/sidebar";
+import Breadcrumb from "@/components/layout/bread-crumb";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: {
+    diploma: string;
+    exam: string;
+  };
+}) {
+  console.log(params);
+
   return (
     <div className="flex h-screen">
       {/* Desktop Sidebar */}
-      <div className="hidden md:block w-80">
+      <div className="hidden lg:block w-80">
         <Sidebar />
       </div>
 
       {/* Content */}
       <div className="flex flex-col flex-1">
-        <Header />
-
+        {/* <Breadcrumb params={params} /> */}
+        <Breadcrumb />
         {/* Mobile Floating Trigger */}
-        <div className="md:hidden fixed top-1/2 left-0 -translate-y-1/2 z-50">
+        <div className="lg:hidden fixed top-1/2 left-0 -translate-y-1/2 z-50">
           <Sheet>
             <SheetTrigger asChild>
               <button
@@ -35,7 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Sheet>
         </div>
 
-        <div className="p-3 flex-1">{children}</div>
+        <div className="p-3 flex-1 bg-gray-50">{children}</div>
       </div>
     </div>
   );

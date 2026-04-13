@@ -1,26 +1,27 @@
-declare type User = {
-  _id: string;
+export type User = {
+  id: string;
+  token: string;
+  firstName: string;
+  lastName: string;
   username: string;
-  firstName: string;
-  lastName: string;
   email: string;
-  phone: string;
-  role: "user";
-  isVerified: boolean;
-  createdAt: string;
+  phone?: string;
+  role: "USER";
+  profilePhoto: string;
+  emailVerified: boolean | Date | null;
+  phoneVerified: boolean;
+  createdAt?: string;
 };
-declare type AccountUser = {
+export type AccountUser = {
   firstName: string;
   lastName: string;
+  profilePhoto: string;
+  id: string;
   username: string;
   email: string;
   phone: string;
 };
 
-declare type MeResponse = {
-  firstName: string;
-  lastName: string;
-  username: string;
-  email: string;
-  phone: string;
+export type DeleteAccountResponse = {
+  message: string;
 };

@@ -1,6 +1,6 @@
 import AccountSidebar from "./_components/account-sidebar";
 import { User } from "lucide-react";
-import Title from "../_components/title";
+import Title from "../../../components/layout/title";
 
 export default function AccountLayout({
   children,

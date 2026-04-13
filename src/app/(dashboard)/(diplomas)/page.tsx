@@ -1,7 +1,7 @@
 import { Metadata } from "next";
-import Title from "../_components/title";
+import Title from "../../../components/layout/title";
 import { GraduationCap } from "lucide-react";
-import FetchSubject from "./_components/fetch-subject";
+import DiplomasGrid from "../_components/diplomas/diplomas-grid";
 
 export const metadata: Metadata = {
   title: "Diplomas",
@@ -15,7 +15,7 @@ export default function Home() {
         title="Diplomas"
         icon={<GraduationCap className="h-full w-full" />}
       />
-      <FetchSubject />
+      <DiplomasGrid />
     </main>
   );
 }

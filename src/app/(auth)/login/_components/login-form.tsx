@@ -23,7 +23,7 @@ export default function LoginForm() {
   // Initialize react-hook-form with default values and Zod validation
   const form = useForm<loginValues>({
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
     resolver: zodResolver(loginSchema),
@@ -51,19 +51,19 @@ export default function LoginForm() {
           className="flex flex-col gap-4 w-full"
           onSubmit={form.handleSubmit(onsubmit)}
         >
-          {/* Email input field */}
+          {/* Username */}
           <FormField
             control={form.control}
-            name="email"
+            name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    type="email"
-                    placeholder="user@example.com"
-                    error={!!form.formState.errors.email}
+                    autoComplete="new-username"
+                    placeholder="ali123"
+                    error={!!form.formState.errors.username}
                   />
                 </FormControl>
                 <FormMessage />
@@ -93,7 +93,7 @@ export default function LoginForm() {
           {/* Forgot password link */}
           <div className="flex justify-end">
             <Link
-              href={"/forget-password"}
+              href={"/forgot-password"}
               className="text-blue-600 font-medium"
             >
               Forgot your password?

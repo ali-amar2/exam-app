@@ -38,48 +38,38 @@ export const registerSchema = z
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
         "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
       ),
-    rePassword: z.string().nonempty("Please confirm your password"),
+    confirmPassword: z.string().nonempty("Please confirm your password"),
   })
-  .refine((data) => data.password === data.rePassword, {
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
-    path: ["rePassword"],
+    path: ["confirmPassword"],
   });
 export const loginSchema = z.object({
-  email: z
+  username: z
     .string()
-    .nonempty("Email is required")
-    .email("Invalid email address"),
+    .nonempty("Username is required")
+    .min(3, "Username must be at least 3 characters"),
   password: z.string().nonempty("Password is required"),
 });
 
-export const forgetPassSchema = loginSchema.pick({ email: true });
+export const forgetPassSchema = registerSchema.pick({ email: true });
 
 export const ReceiveOtpSchema = z.object({
   resetCode: z.string().nonempty("Your OTP is required"),
 });
 
-export const newPasswordSchema = z
+export const resetPasswordSchema = z
   .object({
-    email: z
-      .string()
-      .nonempty("Email is required")
-      .email("Invalid email address"),
-    newPassword: z
-      .string()
-      .nonempty("Password is required")
-      .regex(
-        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-        "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
-      ),
-    rePassword: z.string().nonempty("Please confirm your password"),
+    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
   })
-  .refine((data) => data.newPassword === data.rePassword, {
+  .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords do not match",
-    path: ["rePassword"],
+    path: ["confirmPassword"],
   });
 
 export type loginValues = z.infer<typeof loginSchema>;
 export type registerValues = z.infer<typeof registerSchema>;
 export type forgetPassValues = z.infer<typeof forgetPassSchema>;
 export type ReceiveOtpValues = z.infer<typeof ReceiveOtpSchema>;
-export type newPasswordValues = z.infer<typeof newPasswordSchema>;
+export type resetPasswordValues = z.infer<typeof resetPasswordSchema>;

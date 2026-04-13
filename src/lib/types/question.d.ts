@@ -1,18 +1,15 @@
-declare type Answer = {
-  answer: string;
-  key: string;
+export type Answer = {
+  id: string;
+  text: string;
 };
 
-declare type Question = DatabaseProperties & {
-  question: string;
+export type Question = {
+  id: string;
+  text: string;
+  examId: string;
   answers: Answer[];
-  type: "single_choice" | "multiple_choice";
-  correct: string | string[];
-  subject:
-    | (DatabaseProperties & {
-        name: string;
-        icon: string;
-      })
-    | null;
-  exam: Exam;
+};
+
+export type QuestionsPayload = {
+  questions: Question[];
 };

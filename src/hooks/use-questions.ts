@@ -1,11 +1,13 @@
 "use client";
+
+import { getExamQuestions } from "@/lib/services/question.service";
 import { useQuery } from "@tanstack/react-query";
-import getQuestions from "@/lib/services/question.service";
 
 export default function useQuestions(examId: string) {
   return useQuery({
-    queryKey: ["questions", examId],
-    queryFn: () => getQuestions(examId),
+    queryKey: ["exam-questions", examId],
+    queryFn: () => getExamQuestions(examId),
     enabled: !!examId,
+    staleTime: 1000 * 60 * 5,
   });
 }

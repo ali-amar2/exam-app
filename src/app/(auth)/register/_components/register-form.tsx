@@ -1,11 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
-import { PhoneInput } from "@/components/ui/phone-input";
-import { registerSchema, registerValues } from "@/lib/schemas/auth.schema";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -14,13 +8,28 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import useRegister from "../_hooks/use-register";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { registerSchema, registerValues } from "@/lib/schemas/auth.schema";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
 import ErrorBox from "@/components/ui/error-box";
 
-export default function RegisterForm() {
-  // Initialize react-hook-form with default values and Zod validation
+type RegisterFormProps = {
+  onSubmit: (values: registerValues) => void;
+  isPending?: boolean;
+  error?: string;
+};
+
+export default function RegisterForm({
+  onSubmit,
+  isPending,
+  error,
+}: RegisterFormProps) {
+  // form state
   const form = useForm<registerValues>({
     defaultValues: {
       firstName: "",
@@ -29,34 +38,23 @@ export default function RegisterForm() {
       email: "",
       phone: "",
       password: "",
-      rePassword: "",
+      confirmPassword: "",
     },
     resolver: zodResolver(registerSchema),
   });
 
-  // Navigation
-  const router = useRouter();
-  // Hooks
-  const { isPending, data, mutate } = useRegister();
-
-  // Submit handler to call registration API and redirect to login on success
-  const onsubmit: SubmitHandler<registerValues> = (values) => {
-    mutate(values, {
-      onSuccess: (response) => {
-        if (!("code" in response)) {
-          router.push("/login"); // Redirect to login page
-        }
-      },
-    });
+  // submit handler
+  const handleSubmit: SubmitHandler<registerValues> = (values) => {
+    onSubmit(values);
   };
 
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-4 w-full"
-        onSubmit={form.handleSubmit(onsubmit)}
+        className="flex flex-col gap-1 w-full"
+        onSubmit={form.handleSubmit(handleSubmit)}
       >
-        {/* First and Last Name fields */}
+        {/* First & Last Name */}
         <div className="flex gap-4">
           <FormField
             control={form.control}
@@ -75,6 +73,7 @@ export default function RegisterForm() {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="lastName"
@@ -94,7 +93,7 @@ export default function RegisterForm() {
           />
         </div>
 
-        {/* Username field */}
+        {/* Username */}
         <FormField
           control={form.control}
           name="username"
@@ -114,7 +113,7 @@ export default function RegisterForm() {
           )}
         />
 
-        {/* Email field */}
+        {/* Email */}
         <FormField
           control={form.control}
           name="email"
@@ -134,7 +133,7 @@ export default function RegisterForm() {
           )}
         />
 
-        {/* Phone input field */}
+        {/* Phone */}
         <FormField
           control={form.control}
           name="phone"
@@ -162,7 +161,7 @@ export default function RegisterForm() {
           )}
         />
 
-        {/* Password fields */}
+        {/* Password */}
         <FormField
           control={form.control}
           name="password"
@@ -181,9 +180,11 @@ export default function RegisterForm() {
             </FormItem>
           )}
         />
+
+        {/* Confirm Password */}
         <FormField
           control={form.control}
-          name="rePassword"
+          name="confirmPassword"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
@@ -191,7 +192,7 @@ export default function RegisterForm() {
                 <PasswordInput
                   {...field}
                   placeholder="********"
-                  error={!!form.formState.errors.rePassword}
+                  error={!!form.formState.errors.confirmPassword}
                 />
               </FormControl>
               <FormMessage />
@@ -199,10 +200,10 @@ export default function RegisterForm() {
           )}
         />
 
-        {/* Display API error if registration fails */}
-        {data && "code" in data && <ErrorBox message={data.message} />}
+        {/* Backend error message */}
+        {error && <ErrorBox message={error} />}
 
-        {/* Submit button */}
+        {/* Submit Button*/}
         <Button disabled={isPending} type="submit" className="my-4">
           {isPending ? (
             <Loader className="animate-spin mr-2" size={16} />

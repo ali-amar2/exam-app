@@ -1,8 +1,5 @@
 "use client";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { PhoneInput } from "@/components/ui/phone-input";
+
 import {
   Form,
   FormControl,
@@ -11,23 +8,35 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { Loader } from "lucide-react";
-import { accountSchema, accountValues } from "@/lib/schemas/account.schema";
-import DeleteAccountDialog from "./alert-dialog";
-import { useEditProfile } from "../_hooks/use-edit-profile";
-import { useUserData } from "../_hooks/use-user-data";
 import ErrorBox from "@/components/ui/error-box";
+import DeleteAccountDialog from "./alert-dialog";
+import { accountSchema, accountValues } from "@/lib/schemas/account.schema";
+import { AccountUser } from "@/lib/types/user";
+import { useUpdateProfile } from "../_hooks/use-update-profile";
 import { useToast } from "@/hooks/use-toast";
-import Loading from "@/app/loading";
+import { useRouter } from "next/navigation";
+import { normalizePhone } from "@/lib/utils/phone";
 
-export default function AccountForm() {
+export default function AccountForm({
+  initialUser,
+}: {
+  initialUser: AccountUser;
+}) {
+  // Hooks
+  const { updateProfile, isPending, error } = useUpdateProfile();
   const { toast } = useToast();
-  const { data: user, isLoading: isUserLoading } = useUserData();
-  const { mutate: editProfile, isPending, isError, error } = useEditProfile();
-  const EditPhoneInput = (phone: string) =>
-    phone.startsWith("0") ? "+20" + phone.slice(1) : phone;
+
+  // Navigations
+  const router = useRouter();
+
+  // Form  initialization
   const form = useForm<accountValues>({
     resolver: zodResolver(accountSchema),
     defaultValues: {
@@ -40,65 +49,65 @@ export default function AccountForm() {
   });
 
   useEffect(() => {
-    if (user) {
-      form.reset({
-        firstName: user.firstName ?? "",
-        lastName: user.lastName ?? "",
-        username: user.username ?? "",
-        email: user.email ?? "",
-        phone: user.phone ? EditPhoneInput(user.phone) : "",
-      });
-    }
-  }, [user, form]);
+    if (!initialUser) return;
 
-  const onSubmit: SubmitHandler<accountValues> = (values) => {
-    editProfile(values, {
-      onSuccess: () => {
-        toast({
-          title: "Profile updated successfully",
-          duration: 3000,
-        });
-      },
+    form.reset({
+      firstName: initialUser.firstName,
+      lastName: initialUser.lastName,
+      username: initialUser.username,
+      email: initialUser.email,
+      phone: normalizePhone(initialUser.phone),
     });
-  };
+  }, [initialUser, form]);
 
-  if (isUserLoading) {
-    return (
-      <div className="flex items-center justify-center h-[25rem] w-full">
-        <Loading />
-      </div>
+  // submit handler
+  const onSubmit = (values: accountValues) => {
+    updateProfile(
+      {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        phone: values.phone,
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Profile updated successfully",
+          });
+          router.refresh();
+          form.reset(values);
+        },
+      },
     );
-  }
+  };
 
   return (
     <Form {...form}>
-      <form
-        className="flex flex-col gap-4 w-full"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        {/* First & Last Name */}
-        <div className="flex gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
+        {/* First Name  */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="firstName"
             render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>First name</FormLabel>
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input placeholder="John" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          {/* Last Name  */}
           <FormField
             control={form.control}
             name="lastName"
             render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Last name</FormLabel>
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input placeholder="Doe" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -106,37 +115,37 @@ export default function AccountForm() {
           />
         </div>
 
-        {/* Username */}
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Username  */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input {...field} disabled />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
-        {/* Email */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Email  */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} disabled />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
 
-        {/* Phone */}
+        {/* phone */}
         <FormField
           control={form.control}
           name="phone"
@@ -149,8 +158,7 @@ export default function AccountForm() {
                   value={field.value || ""}
                   onChange={(v) => field.onChange(v ?? "")}
                   defaultCountry="EG"
-                  international
-                  countryCallingCodeEditable={false}
+                  international={false}
                 />
               </FormControl>
               <FormMessage />
@@ -158,13 +166,26 @@ export default function AccountForm() {
           )}
         />
 
-        {isError && <ErrorBox message={error.message} />}
+        {/* Backend Error message if isError*/}
+        {error && (
+          <ErrorBox
+            message={error instanceof Error ? error.message : String(error)}
+          />
+        )}
 
-        <div className="flex gap-4 mt-4">
+        {/* delete & Save changes buttons */}
+        <div className="flex gap-4">
           <DeleteAccountDialog />
-
-          <Button type="submit" disabled={isPending} className="flex-1">
-            {isPending ? <Loader className="animate-spin" /> : "Save Changes"}
+          <Button
+            type="submit"
+            disabled={isPending || !form.formState.isDirty}
+            className="flex-1"
+          >
+            {isPending ? (
+              <Loader className="animate-spin w-4 h-4" />
+            ) : (
+              "Save Changes"
+            )}
           </Button>
         </div>
       </form>

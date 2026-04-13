@@ -28,7 +28,7 @@ export default function AuthSidebar() {
   ];
   return (
     <>
-      <aside className="hidden lg:block relative py-16 px-16 bg-custom-blue">
+      <aside className="hidden lg:block sticky top-0 h-screen py-12 px-16 bg-custom-blue">
         {/* right circle */}
         <div className="absolute -top-10 -right-10 w-80 h-80 bg-blue-400 rounded-full blur-[170px] opacity-70"></div>
         {/* lefft circle */}
@@ -42,9 +42,9 @@ export default function AuthSidebar() {
         </header>
         {/* Content */}
         <div>
-          <p className="mt-6 font-inter font-bold text-3xl">
-            Empower your learning journey with our smart exam platform.
-          </p>
+          <div className="mt-6 font-inter font-bold text-3xl">
+            Empower your learning <p>journey with our</p> smart exam platform.
+          </div>
           <ul>
             {listItems.map((item, index) => (
               <li key={index} className="flex gap-5 mt-8">

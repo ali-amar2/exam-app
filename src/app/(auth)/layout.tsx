@@ -5,9 +5,9 @@ export default function AuthLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-2">
+      <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
         <AuthSidebar />
-        {children}
+        <div className="bg-white">{children}</div>
       </div>
     </>
   );

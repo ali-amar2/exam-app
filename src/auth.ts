@@ -1,11 +1,13 @@
 import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { ApiResponse } from "./lib/types/api";
 
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+
+  secret: process.env.NEXTAUTH_SECRET,
+
   cookies: {
     sessionToken: {
       name:
@@ -25,46 +27,63 @@ export const authOptions: NextAuthOptions = {
     Credentials({
       name: "Credentials",
       credentials: {
-        email: {},
+        username: {},
         password: {},
       },
 
-      authorize: async (credentials) => {
-        const response = await fetch(`${process.env.API}/auth/signin`, {
-          method: "POST",
-          body: JSON.stringify({
-            email: credentials?.email,
-            password: credentials?.password,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+      async authorize(credentials) {
+        try {
+          const res = await fetch(`${process.env.API}/auth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: credentials?.username,
+              password: credentials?.password,
+            }),
+          });
 
-        const payload: ApiResponse = await response.json();
+          const data = await res.json();
 
-        if ("code" in payload) {
-          throw new Error(payload.message);
+          if (!res.ok || data.status === false) {
+            throw new Error(data.message || "Login failed");
+          }
+
+          const user = data.payload.user;
+          const token = data.payload.token;
+
+          return {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            email: user.email,
+            phone: user.phone,
+            role: user.role,
+            emailVerified: user.emailVerified,
+            phoneVerified: user.phoneVerified,
+            accesstoken: token,
+          };
+        } catch (error: any) {
+          throw new Error(error.message || "Something went wrong");
         }
-
-        return {
-          _id: payload.user._id,
-          accesstoken: payload.token,
-          ...payload.user,
-        };
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       if (user) {
-        token = { ...token, ...user };
+        return {
+          ...token,
+          ...user,
+        };
       }
 
+      // update session
       if (trigger === "update" && session?.user) {
-        token = {
+        return {
           ...token,
           ...session.user,
         };
@@ -73,17 +92,25 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
 
-    session: ({ session, token }) => {
-      session.user._id = token._id;
-      session.user.firstName = token.firstName;
-      session.user.lastName = token.lastName;
-      session.user.username = token.username;
-      session.user.email = token.email || "";
-      session.user.phone = token.phone;
-      session.user.role = token.role;
-      session.user.isVerified = token.isVerified;
-      session.user.createdAt = token.createdAt;
+    async session({ session, token }) {
+      session.user = {
+        id: token.id as string,
+        firstName: token.firstName as string,
+        lastName: token.lastName as string,
+        username: token.username as string,
+        email: token.email as string,
+        phone: token.phone as string,
+        role: token.role as string,
+        emailVerified: token.emailVerified,
+        phoneVerified: token.phoneVerified as boolean,
+        accesstoken: token.accesstoken as string,
+      };
+
       return session;
     },
+  },
+
+  pages: {
+    signIn: "/login",
   },
 };

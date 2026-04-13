@@ -8,12 +8,14 @@ declare type DatabaseProperties = {
 };
 
 declare type SuccessResponse = {
-  message: "success";
+  status: boolean;
+  message: string;
   token: string;
   user: User;
 };
 
 declare type ErrorResponse = {
+  status: boolean;
   message: string;
   code: number;
 };

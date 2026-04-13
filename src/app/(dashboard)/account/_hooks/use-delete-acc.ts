@@ -1,18 +1,18 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteMyAccount } from "@/lib/services/delete-acc.service";
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
+"use client";
+
+import { useMutation } from "@tanstack/react-query";
+import { deleteAccountAction } from "../_actions/delete-account.action";
 
 export function useDeleteAccount() {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-
   return useMutation({
-    mutationFn: deleteMyAccount,
-    onSuccess: async () => {
-      queryClient.clear();
-      await signOut({ redirect: false });
-      router.replace("/login");
+    mutationFn: async () => {
+      const res = await deleteAccountAction();
+
+      if (!res.success) {
+        throw new Error(res.message);
+      }
+
+      return res;
     },
   });
 }
