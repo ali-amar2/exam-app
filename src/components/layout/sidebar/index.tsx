@@ -11,10 +11,6 @@ export default async function Sidebar() {
   const userData = await getUserProfile();
   const imageSrc = userData?.profilePhoto || user;
 
-  if (!userData) {
-    return null;
-  }
-
   return (
     <aside className="flex flex-col gap-16 min-h-screen justify-between w-80 fixed bg-blue-50 pt-8 pb-2">
       <div className="flex flex-col gap-16">

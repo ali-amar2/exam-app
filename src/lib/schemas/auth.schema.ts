@@ -20,8 +20,10 @@ export const registerSchema = z
       .email("Invalid email address"),
     phone: z
       .string()
-      .nonempty("Phone number is required")
+      .min(1, "Phone is required")
       .transform((val) => {
+        if (!val) return "";
+
         let phone = val.replace(/^(\+20)/, "");
         if (!phone.startsWith("0")) {
           phone = "0" + phone;

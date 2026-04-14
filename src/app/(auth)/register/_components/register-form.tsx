@@ -45,6 +45,7 @@ export default function RegisterForm({
 
   // submit handler
   const handleSubmit: SubmitHandler<registerValues> = (values) => {
+    console.log("REGISTER VALUES:", values);
     onSubmit(values);
   };
 
