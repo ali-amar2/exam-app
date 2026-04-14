@@ -10,6 +10,8 @@ import ExamResult from "../exams/exam-result";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import QuestionsTimerChart from "./questions-timer";
 import { cn } from "@/lib/utils/tailwind-merge";
+import { Answer, Question } from "@/lib/types/question";
+import clsx from "clsx";
 
 interface Props {
   initialData: any;
@@ -45,7 +47,7 @@ export default function QuestionView({ initialData, examId }: Props) {
   }, [answers, currentQuestion]);
 
   // Handlers
-  const getFallbackAnswer = useCallback((question: any) => {
+  const getFallbackAnswer = useCallback((question: Question) => {
     return question?.answers?.[0]?.id;
   }, []);
 
@@ -84,7 +86,7 @@ export default function QuestionView({ initialData, examId }: Props) {
     if (hasSubmittedRef.current) return;
     hasSubmittedRef.current = true;
 
-    const formattedAnswers = questions.map((q: any) => ({
+    const formattedAnswers = questions.map((q: Question) => ({
       questionId: q.id,
       answerId: answers[q.id] || getFallbackAnswer(q),
     }));
@@ -127,7 +129,7 @@ export default function QuestionView({ initialData, examId }: Props) {
             </p>
           </div>
 
-          <div className="bg-slate-50 p-2 rounded-xl border">
+          <div className="bg-slate-50 p-2 rounded-xl mx-auto sm:mx-0 ">
             <QuestionsTimerChart
               examId={examId}
               durationMinutes={10}
@@ -150,7 +152,7 @@ export default function QuestionView({ initialData, examId }: Props) {
           onValueChange={onAnswerChange}
           className="grid gap-4"
         >
-          {currentQuestion?.answers.map((a: any) => {
+          {currentQuestion?.answers.map((a: Answer) => {
             const isSelected = currentAnswer === a.id;
 
             return (
@@ -164,11 +166,14 @@ export default function QuestionView({ initialData, examId }: Props) {
                 )}
               >
                 <RadioGroupItem value={a.id} />
-                <span
-                  className={isSelected ? "text-blue-900" : "text-slate-700"}
+                <p
+                  className={clsx(
+                    "leading-normal",
+                    isSelected ? "text-blue-900" : "text-slate-700",
+                  )}
                 >
                   {a.text}
-                </span>
+                </p>
               </Label>
             );
           })}

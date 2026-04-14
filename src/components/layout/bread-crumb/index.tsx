@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useExam } from "@/hooks/use-exam";
 import { useDiploma } from "@/hooks/use-diplomas";
+import { ChevronRight } from "lucide-react"; // أيقونة بسيطة لشكل أنظف
 
 export default function Breadcrumb() {
   // Hooks
@@ -49,22 +50,30 @@ export default function Breadcrumb() {
     : ["Diplomas", ...segments.map((seg, i) => formatSegment(seg, i))];
 
   return (
-    <div className="text-gray-400 bg-white p-4 flex gap-2 text-lg items-center">
-      {trail.map((label, idx) => (
-        <div key={idx} className="flex items-center gap-2">
-          {idx > 0 && <span>/</span>}
+    <nav
+      aria-label="Breadcrumb"
+      className="bg-white p-4 border-b border-gray-100"
+    >
+      <ol className="flex flex-wrap items-center gap-x-2 gap-y-2 text-gray-500 text-sm sm:text-base md:text-lg">
+        {trail.map((label, idx) => (
+          <li key={idx} className="flex items-center gap-2">
+            {idx > 0 && "/"}
 
-          <span
-            className={
-              idx === trail.length - 1
-                ? "text-blue-600 font-medium capitalize"
-                : "capitalize"
-            }
-          >
-            {label}
-          </span>
-        </div>
-      ))}
-    </div>
+            <span
+              className={`
+                capitalize transition-colors duration-200
+                ${
+                  idx === trail.length - 1
+                    ? "text-blue-600 font-semibold"
+                    : "hover:text-gray-700 cursor-default"
+                }
+              `}
+            >
+              {label || "..."}{" "}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 }
