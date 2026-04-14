@@ -45,7 +45,6 @@ export default function RegisterForm({
 
   // submit handler
   const handleSubmit: SubmitHandler<registerValues> = (values) => {
-    console.log("REGISTER VALUES:", values);
     onSubmit(values);
   };
 
@@ -202,7 +201,7 @@ export default function RegisterForm({
         />
 
         {/* Backend error message */}
-        {error && <ErrorBox message={error} />}
+        <div className="mt-2">{error && <ErrorBox message={error} />}</div>
 
         {/* Submit Button*/}
         <Button disabled={isPending} type="submit" className="my-4">

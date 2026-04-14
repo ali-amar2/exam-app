@@ -1,11 +1,11 @@
 "use client";
+
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { registerValues } from "@/lib/schemas/auth.schema";
 import { useToast } from "@/hooks/use-toast";
 import useSendVerification from "./use-send-verification";
 import useConfirmVerification from "./use-confirm-verification";
-import { getErrorMessage } from "@/lib/utils/error";
 import useRegister from "./use-register";
 
 export default function useRegisterFlow() {
@@ -19,17 +19,16 @@ export default function useRegisterFlow() {
   const router = useRouter();
   const { toast } = useToast();
 
-  // Hooks
+  // Queries
   const { mutateAsync: register, isPending: isRegistering } = useRegister();
   const { mutateAsync: sendVerification, isPending: isSending } =
     useSendVerification();
   const { mutateAsync: confirmVerification, isPending: isConfirming } =
     useConfirmVerification();
 
-  // utils
   const resetError = useCallback(() => setError(null), []);
 
-  // Step 1: Send Email
+  // Handlers
   const handleSubmitEmail = useCallback(
     async (values: registerValues) => {
       resetError();
@@ -39,14 +38,13 @@ export default function useRegisterFlow() {
         setFormData(values);
         await sendVerification(values.email);
         setStep("otp");
-      } catch (err) {
-        setError(getErrorMessage(err));
+      } catch (err: any) {
+        setError(err.message);
       }
     },
     [sendVerification, resetError],
   );
 
-  // Step 2: Verify OTP + Register
   const handleVerifyOtp = useCallback(
     async (code: string) => {
       if (!formData || !email) return;
@@ -59,18 +57,17 @@ export default function useRegisterFlow() {
 
         toast({
           description: "Your account has been created successfully",
-          duration: 2000,
         });
 
         router.replace("/login");
-      } catch (err) {
-        setError(getErrorMessage(err));
+      } catch (err: any) {
+        setError(err.message);
       }
     },
     [confirmVerification, register, formData, email, router, toast, resetError],
   );
 
-  // Resend OTP
+  // resend
   const handleResendOtp = useCallback(async () => {
     if (!email) return;
 
@@ -78,12 +75,12 @@ export default function useRegisterFlow() {
 
     try {
       await sendVerification(email);
-    } catch (err) {
-      setError(getErrorMessage(err));
+    } catch (err: any) {
+      setError(err.message);
     }
   }, [email, sendVerification, resetError]);
 
-  // Back to form
+  // back
   const handleGoBack = useCallback(() => {
     resetError();
     setStep("form");
