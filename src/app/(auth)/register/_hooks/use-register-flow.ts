@@ -33,14 +33,17 @@ export default function useRegisterFlow() {
     async (values: registerValues) => {
       resetError();
 
-      try {
-        setEmail(values.email);
-        setFormData(values);
-        await sendVerification(values.email);
-        setStep("otp");
-      } catch (err: any) {
-        setError(err.message);
+      setEmail(values.email);
+      setFormData(values);
+
+      const res = await sendVerification(values.email);
+
+      if (!res?.success) {
+        setError(res?.message || "Unable to send verification code");
+        return;
       }
+
+      setStep("otp");
     },
     [sendVerification, resetError],
   );
@@ -51,18 +54,25 @@ export default function useRegisterFlow() {
 
       resetError();
 
-      try {
-        await confirmVerification({ email, code });
-        await register(formData);
+      const verifyRes = await confirmVerification({ email, code });
 
-        toast({
-          description: "Your account has been created successfully",
-        });
-
-        router.replace("/login");
-      } catch (err: any) {
-        setError(err.message);
+      if (!verifyRes?.success) {
+        setError(verifyRes?.message || "Invalid or expired code");
+        return;
       }
+
+      const registerRes = await register(formData);
+
+      if (!registerRes?.success) {
+        setError(registerRes?.message || "Registration failed");
+        return;
+      }
+
+      toast({
+        description: "Your account has been created successfully",
+      });
+
+      router.replace("/login");
     },
     [confirmVerification, register, formData, email, router, toast, resetError],
   );
@@ -73,10 +83,10 @@ export default function useRegisterFlow() {
 
     resetError();
 
-    try {
-      await sendVerification(email);
-    } catch (err: any) {
-      setError(err.message);
+    const res = await sendVerification(email);
+
+    if (!res?.success) {
+      setError(res?.message || "Unable to send verification code");
     }
   }, [email, sendVerification, resetError]);
 

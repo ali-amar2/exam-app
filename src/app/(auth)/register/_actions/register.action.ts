@@ -11,9 +11,15 @@ export async function registerAction(data: registerValues) {
 
   const payload = await response.json();
 
-  if (!response.ok || !payload.status) {
-    throw new Error(payload.message || "Registration failed");
+  if (!response.ok || payload?.status === false) {
+    return {
+      success: false,
+      message: payload?.message || "Registration failed",
+    };
   }
 
-  return payload;
+  return {
+    success: true,
+    data: payload,
+  };
 }

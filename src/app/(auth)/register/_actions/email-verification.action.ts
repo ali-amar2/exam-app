@@ -9,8 +9,11 @@ export async function sendEmailVerification(email: string) {
 
   const data = await res.json();
 
-  if (!res.ok) {
-    throw new Error(data.message || "Unable to send verification code");
+  if (!res.ok || data?.status === false) {
+    return {
+      success: false,
+      message: data?.message || "Unable to send verification code",
+    };
   }
 
   return {
