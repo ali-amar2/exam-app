@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { GraduationCap, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,11 +15,12 @@ export default function SidebarLinks() {
   // Functions
   const getLink = (type: "home" | "account") => {
     const isActive = type === "account" ? isAccount : !isAccount;
-    return `flex gap-3 text-lg p-4 ${
+    return clsx(
+      "flex gap-3 text-lg p-4",
       isActive
         ? "border border-blue-500 bg-blue-100 text-blue-500 w-[98%]"
-        : "text-gray-600"
-    }`;
+        : "text-gray-600",
+    );
   };
 
   return (

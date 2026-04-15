@@ -6,15 +6,16 @@ import { Button } from "@/components/ui/button";
 import ExamResultChart from "@/components/ui/result-chart";
 import { RotateCcw, FolderSearch, Info } from "lucide-react";
 import Loading from "@/app/loading";
+import { ResultExam } from "@/lib/types/exam";
 
 interface ExamResultProps {
-  result: any;
+  result: ResultExam;
   onRestart: () => void;
 }
 export default function ExamResult({ result, onRestart }: ExamResultProps) {
   // variables
-  const data = result?.payload || result?.submission;
-  const analytics = data?.questions || result?.analytics || [];
+  const data = result?.submission;
+  const analytics = result?.analytics ?? [];
 
   if (!data) {
     return <Loading />;

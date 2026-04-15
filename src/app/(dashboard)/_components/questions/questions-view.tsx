@@ -10,11 +10,11 @@ import ExamResult from "../exams/exam-result";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import QuestionsTimerChart from "./questions-timer";
 import { cn } from "@/lib/utils/tailwind-merge";
-import { Answer, Question } from "@/lib/types/question";
+import { Answer, Question, QuestionsPayload } from "@/lib/types/question";
 import clsx from "clsx";
 
 interface Props {
-  initialData: any;
+  initialData: QuestionsPayload;
   examId: string;
 }
 

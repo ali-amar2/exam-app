@@ -3,18 +3,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Sidebar from "@/components/layout/sidebar";
 import Breadcrumb from "@/components/layout/bread-crumb";
 
-export default function Layout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: {
-    diploma: string;
-    exam: string;
-  };
-}) {
-  console.log(params);
-
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen">
       {/* Desktop Sidebar */}
@@ -24,7 +13,7 @@ export default function Layout({
 
       {/* Content */}
       <div className="flex flex-col flex-1">
-        {/* <Breadcrumb params={params} /> */}
+        {/* <Breadcrumb  /> */}
         <Breadcrumb />
         {/* Mobile Floating Trigger */}
         <div className="lg:hidden fixed top-1/2 left-0 -translate-y-1/2 z-50">

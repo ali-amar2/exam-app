@@ -1,8 +1,4 @@
-declare interface ExamCount {
-  questions: number;
-}
-
-declare interface Exam {
+export interface Exam {
   id: string;
   title: string;
   description: string;
@@ -12,31 +8,78 @@ declare interface Exam {
   immutable: boolean;
   createdAt: string;
   updatedAt: string;
-  diploma: Diploma;
+  diploma: ExamDiploma;
   _count: ExamCount;
 }
-
-declare interface ExamsMetadata {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
-
-declare interface ExamsPayload {
+export interface ExamsPayload {
   data: Exam[];
   metadata: ExamsMetadata;
 }
 
-declare interface ExamsResponse {
+export interface ExamsResponse {
   status: boolean;
-  message: string;
   code: number;
   payload: ExamsPayload;
 }
 
-declare interface GetExamsParams {
+export interface GetExamsParams {
   diplomaId: string;
   page?: number;
   limit?: number;
+}
+
+export interface AnswerOption {
+  id: string;
+  text: string;
+}
+
+export interface ExamQuestion {
+  id: string;
+  text: string;
+  examId: string;
+  answers: AnswerOption[];
+}
+
+export interface ExamQuestionsPayload {
+  questions: ExamQuestion[];
+}
+
+export interface ExamQuestionsResponse {
+  status: boolean;
+  code: number;
+  payload: ExamQuestionsPayload;
+}
+
+export interface ExamSubmission {
+  id: string;
+  examId: string;
+  examTitle: string;
+  score: number;
+  totalQuestions: number;
+  correctAnswers: number;
+  wrongAnswers: number;
+  submittedAt: string;
+}
+
+export interface SelectedAnswer {
+  id: string;
+  text: string;
+}
+
+export interface CorrectAnswer {
+  id: string;
+  text: string;
+}
+
+export interface ExamAnalyticsItem {
+  questionId: string;
+  questionText: string;
+  selectedAnswer: SelectedAnswer;
+  isCorrect: boolean;
+  correctAnswer: CorrectAnswer;
+}
+
+export interface ResultExam {
+  submission: ExamSubmission;
+  analytics: ExamAnalyticsItem[];
 }

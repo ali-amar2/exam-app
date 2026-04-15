@@ -1,3 +1,4 @@
+import { ExamsResponse, GetExamsParams } from "@/lib/types/exam";
 import { getToken } from "../../utils/get-token";
 
 export default async function getExams({
@@ -23,7 +24,7 @@ export default async function getExams({
     const data: ExamsResponse = await res.json();
 
     if (!res.ok) {
-      throw new Error(data?.message || "Failed to fetch exams");
+      throw new Error("Failed to fetch exams");
     }
 
     return data;

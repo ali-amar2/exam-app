@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import { useExam } from "@/hooks/use-exam";
 import { useDiploma } from "@/hooks/use-diplomas";
-import { ChevronRight } from "lucide-react"; // أيقونة بسيطة لشكل أنظف
 
 export default function Breadcrumb() {
   // Hooks

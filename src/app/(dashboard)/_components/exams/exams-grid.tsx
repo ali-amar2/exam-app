@@ -1,4 +1,5 @@
 import getExams from "@/lib/services/exams/exams.service";
+import { Exam } from "@/lib/types/exam";
 import { normalizeImageUrl } from "@/lib/utils/image-url";
 import { CircleQuestionMark, Timer } from "lucide-react";
 import Image from "next/image";
