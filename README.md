@@ -31,13 +31,12 @@ Designed with performance, security, and user experience in mind.
 ### Data & State Management
 
 - @tanstack/react-query
-- Server-side data fetching via Route Handlers
+- Server-side data fetching 
 
 ### Forms & Validation
 
 - react-hook-form
 - zod
-- @hookform/resolvers
 
 ### UI & Styling
 
