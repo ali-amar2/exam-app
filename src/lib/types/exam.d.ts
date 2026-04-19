@@ -9,7 +9,7 @@ export interface Exam {
   createdAt: string;
   updatedAt: string;
   diploma: ExamDiploma;
-  _count: ExamCount;
+  questionsCount: ExamCount;
 }
 export interface ExamsPayload {
   data: Exam[];

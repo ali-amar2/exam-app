@@ -49,7 +49,7 @@ export default async function ExamsGrid({ diplomaId }: { diplomaId: string }) {
               <div className=" flex flex-wrap gap-2 sm:gap-3 font-bold text-zinc-500 text-xs sm:text-sm">
                 <span className="flex items-center gap-2">
                   <CircleQuestionMark size={16} />
-                  {exam._count.questions} Questions
+                  {exam.questionsCount} Questions
                 </span>
                 <span className="flex items-center gap-2">
                   <Timer size={16} />
