@@ -18,12 +18,13 @@ export default function QuestionsTimerChart({
 }: ExamTimerChartProps) {
   // States
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
-
   const totalSeconds = useMemo(() => durationMinutes * 60, [durationMinutes]);
+
   // Refs
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startRef = useRef<number>(0);
   const endedRef = useRef(false);
+  const startedRef = useRef(false);
 
   // init timer per exam
   useEffect(() => {
@@ -39,6 +40,8 @@ export default function QuestionsTimerChart({
         })();
 
     startRef.current = start;
+    startedRef.current = false;
+    endedRef.current = false;
 
     const initial = Math.max(
       totalSeconds - Math.floor((Date.now() - start) / 1000),
@@ -49,23 +52,20 @@ export default function QuestionsTimerChart({
 
     return () => {
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+        clearTimeout(intervalRef.current);
       }
     };
   }, [examId, totalSeconds]);
 
+  // runs a self-updating timer loop that recalculates remaining time every second
   useEffect(() => {
-    if (timeLeft === null) return;
-
     const key = STORAGE_KEY(examId);
 
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-
-    intervalRef.current = setInterval(() => {
+    const tick = () => {
+      const now = Date.now();
+      const drift = now % 1000;
       const remaining = Math.max(
-        totalSeconds - Math.floor((Date.now() - startRef.current) / 1000),
+        totalSeconds - Math.floor((now - startRef.current) / 1000),
         0,
       );
 
@@ -75,14 +75,18 @@ export default function QuestionsTimerChart({
         endedRef.current = true;
         localStorage.removeItem(key);
         onTimeEnd();
-        if (intervalRef.current) clearInterval(intervalRef.current);
+        return;
       }
-    }, 1000);
+
+      intervalRef.current = setTimeout(tick, 1000 - drift);
+    };
+
+    tick();
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (intervalRef.current) clearTimeout(intervalRef.current);
     };
-  }, [examId, totalSeconds, timeLeft, onTimeEnd]);
+  }, [examId, totalSeconds, onTimeEnd]);
 
   if (timeLeft === null) {
     return <div className="w-20 h-20 text-xs text-gray-400">--</div>;
