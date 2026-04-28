@@ -16,14 +16,12 @@ export default function DiplomasGrid() {
   // variables
   const diplomas: Diploma[] = data?.pages.flatMap((page) => page.data) ?? [];
 
-  {
-    if (isLoading) {
-      return (
-        <div className="w-full py-4">
-          <DiplomaSkeleton count={6} />
-        </div>
-      );
-    }
+  if (isLoading) {
+    return (
+      <div className="w-full py-4">
+        <DiplomaSkeleton count={6} />
+      </div>
+    );
   }
 
   if (isError) {
@@ -47,27 +45,40 @@ export default function DiplomasGrid() {
         </div>
       }
       endMessage={
-        <p className="text-center py-4 my-2 text-red-500 bg-red-100">
+        <p
+          role="status"
+          aria-live="polite"
+          className="text-center py-4 my-2 text-red-500 bg-red-100"
+        >
           No more diplomas to load
         </p>
       }
     >
-      <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-2 py-2">
+      <div
+        className="grid lg:grid-cols-2 xl:grid-cols-3 gap-2 py-2"
+        role="list"
+        aria-label="Diplomas list"
+      >
         {diplomas.map((diploma) => (
           <Link
             key={diploma.id}
             href={`/${diploma.id}`}
             className="relative flex justify-center h-96"
+            aria-label={`View diploma ${diploma.title}`}
           >
             <Image
               src={normalizeImageUrl(diploma.image)}
               width={400}
               height={400}
-              alt={diploma.title}
+              alt={`Diploma image for ${diploma.title}`}
               className="w-full h-full object-fill"
             />
 
-            <div className="flex absolute flex-col text-white p-5 w-11/12 bottom-3 bg-[rgba(21,93,252,0.75)] shadow text-xl font-medium justify-center transition-all duration-300 max-h-24 overflow-hidden hover:max-h-96">
+            <div
+              className="flex absolute flex-col text-white p-5 w-11/12 bottom-3 bg-[rgba(21,93,252,0.75)] shadow text-xl font-medium justify-center transition-all duration-300 max-h-24 overflow-hidden hover:max-h-96"
+              role="group"
+              aria-label={`Diploma details for ${diploma.title}`}
+            >
               {/* Title */}
               <div>{diploma.title}</div>
 

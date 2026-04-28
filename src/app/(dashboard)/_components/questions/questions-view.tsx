@@ -31,10 +31,8 @@ export default function QuestionView({ initialData, examId }: Props) {
   // Refs
   const hasSubmittedRef = useRef(false);
 
-  // Variables
-  const questions = initialData?.questions ?? [];
-
   // variables
+  const questions = initialData?.questions ?? [];
   const currentQuestion = useMemo(() => {
     return questions[currentIndex];
   }, [questions, currentIndex]);
@@ -113,7 +111,10 @@ export default function QuestionView({ initialData, examId }: Props) {
   }
 
   return (
-    <div className="w-full mx-auto flex flex-col p-4">
+    <main
+      aria-label="Exam session"
+      className="w-full mx-auto flex flex-col p-4"
+    >
       {/* Header */}
       <div className="w-full space-y-6 mb-8">
         <div className="flex flex-col sm:flex-row justify-between gap-4">
@@ -138,7 +139,11 @@ export default function QuestionView({ initialData, examId }: Props) {
           </div>
         </div>
 
-        <Progress value={progress} className="h-2 w-full" />
+        <Progress
+          value={progress}
+          className="h-2 w-full"
+          aria-label={`Progress: ${Math.round(progress)}% completed`}
+        />
       </div>
 
       {/* Question */}
@@ -147,37 +152,44 @@ export default function QuestionView({ initialData, examId }: Props) {
           {currentQuestion?.text}
         </h2>
 
-        <RadioGroup
-          value={currentAnswer}
-          onValueChange={onAnswerChange}
+        <fieldset
+          aria-label="Answer options for current question"
           className="grid gap-4"
         >
-          {currentQuestion?.answers.map((a: Answer) => {
-            const isSelected = currentAnswer === a.id;
+          <legend className="sr-only">{currentQuestion?.text}</legend>
 
-            return (
-              <Label
-                key={a.id}
-                className={cn(
-                  "flex items-center gap-4 p-5 border-2 rounded-2xl cursor-pointer transition",
-                  isSelected
-                    ? "border-blue-600 bg-blue-50"
-                    : "border-slate-100 bg-white hover:bg-slate-50",
-                )}
-              >
-                <RadioGroupItem value={a.id} />
-                <p
-                  className={clsx(
-                    "leading-normal",
-                    isSelected ? "text-blue-900" : "text-slate-700",
+          <RadioGroup
+            value={currentAnswer}
+            onValueChange={onAnswerChange}
+            className="grid gap-4"
+          >
+            {currentQuestion?.answers.map((a: Answer) => {
+              const isSelected = currentAnswer === a.id;
+
+              return (
+                <Label
+                  key={a.id}
+                  className={cn(
+                    "flex items-center gap-4 p-5 border-2 rounded-2xl cursor-pointer transition",
+                    isSelected
+                      ? "border-blue-600 bg-blue-50"
+                      : "border-slate-100 bg-white hover:bg-slate-50",
                   )}
                 >
-                  {a.text}
-                </p>
-              </Label>
-            );
-          })}
-        </RadioGroup>
+                  <RadioGroupItem value={a.id} />
+                  <p
+                    className={clsx(
+                      "leading-normal",
+                      isSelected ? "text-blue-900" : "text-slate-700",
+                    )}
+                  >
+                    {a.text}
+                  </p>
+                </Label>
+              );
+            })}
+          </RadioGroup>
+        </fieldset>
       </div>
 
       {/* Footer */}
@@ -187,6 +199,7 @@ export default function QuestionView({ initialData, examId }: Props) {
           className="flex-1"
           onClick={handlePrevious}
           disabled={currentIndex === 0 || isPending}
+          aria-label="Go to previous question"
         >
           <ChevronLeft className="w-4 h-4 mr-2" />
           Previous
@@ -196,6 +209,7 @@ export default function QuestionView({ initialData, examId }: Props) {
           className="flex-1"
           onClick={isLastQuestion ? handleSubmit : handleNext}
           disabled={!currentAnswer || isPending}
+          aria-label={isLastQuestion ? "Submit exam" : "Go to next question"}
         >
           {isPending ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -208,6 +222,6 @@ export default function QuestionView({ initialData, examId }: Props) {
           )}
         </Button>
       </div>
-    </div>
+    </main>
   );
 }
