@@ -14,7 +14,8 @@ export default function DiplomasGrid() {
     useDiplomas(6);
 
   // variables
-  const diplomas: Diploma[] = data?.pages.flatMap((page) => page.data) ?? [];
+  const diplomas: Diploma[] =
+    data?.pages.flatMap((page) => page.data).slice(2) ?? [];
 
   if (isLoading) {
     return (
