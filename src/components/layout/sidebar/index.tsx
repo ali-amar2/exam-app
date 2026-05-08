@@ -9,9 +9,6 @@ import { getUserProfile } from "@/lib/services/user-profile.service";
 export default async function Sidebar() {
   // variables
   const userData = await getUserProfile();
-
-  if (!userData) return null;
-
   const imageSrc = userData?.profilePhoto || user;
 
   return (
@@ -29,7 +26,7 @@ export default async function Sidebar() {
         <SidebarLinks />
       </div>
       <div className="flex gap-2 justify-center items-center px-2">
-        {/* User profile photo  */}
+        {/* User profile photo */}
         <div className="w-10 h-10 border overflow-hidden border-blue-600">
           <Image
             src={imageSrc}
@@ -39,8 +36,8 @@ export default async function Sidebar() {
         </div>
 
         <div className="flex flex-col text-sm">
-          <span className="text-blue-600 font-bold">{userData.firstName}</span>
-          <span className="text-gray-500">{userData.email}</span>
+          <span className="text-blue-600 font-bold">{userData?.firstName}</span>
+          <span className="text-gray-500">{userData?.email}</span>
         </div>
         <SidebarDropdown />
       </div>

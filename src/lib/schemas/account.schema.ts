@@ -1,22 +1,27 @@
 import z from "zod";
 
-export const accountSchema = z.object({
+// Base schema (بدون refine)
+const accountBaseSchema = z.object({
   firstName: z
     .string()
     .nonempty("First name is required")
     .min(2, "First name must be at least 2 characters"),
+
   lastName: z
     .string()
     .nonempty("Last name is required")
     .min(2, "Last name must be at least 2 characters"),
+
   username: z
     .string()
     .nonempty("Username is required")
     .min(3, "Username must be at least 3 characters"),
+
   email: z
     .string()
     .nonempty("Email is required")
     .email("Invalid email address"),
+
   phone: z
     .string()
     .nonempty("Phone number is required")
@@ -32,6 +37,10 @@ export const accountSchema = z.object({
     }),
 });
 
+// Account schema
+export const accountSchema = accountBaseSchema;
+
+// Change password schema
 export const changePasswordSchema = z
   .object({
     currentPassword: z
@@ -41,6 +50,7 @@ export const changePasswordSchema = z
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
         "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
       ),
+
     newPassword: z
       .string()
       .nonempty("New password is required")
@@ -48,16 +58,18 @@ export const changePasswordSchema = z
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
         "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
       ),
+
     confirmPassword: z.string().nonempty("Please confirm your new password"),
   })
   .superRefine((data, ctx) => {
     if (data.currentPassword === data.newPassword) {
       ctx.addIssue({
-        path: ["password"],
+        path: ["newPassword"],
         message: "New password must be different from old password",
         code: z.ZodIssueCode.custom,
       });
     }
+
     if (data.newPassword !== data.confirmPassword) {
       ctx.addIssue({
         path: ["confirmPassword"],
