@@ -14,8 +14,7 @@ export default function DiplomasGrid() {
     useDiplomas(6);
 
   // variables
-  const diplomas: Diploma[] =
-    data?.pages.flatMap((page) => page.data).slice(2) ?? [];
+  const diplomas: Diploma[] = data?.pages.flatMap((page) => page.data) ?? [];
 
   if (isLoading) {
     return (
@@ -49,48 +48,43 @@ export default function DiplomasGrid() {
         <p
           role="status"
           aria-live="polite"
-          className="text-center py-4 my-2 text-red-500 bg-red-100"
+          className="text-center py-4 my-2 text-slate-600 bg-slate-100"
         >
           No more diplomas to load
         </p>
       }
     >
-      <div
+      <ul
         className="grid lg:grid-cols-2 xl:grid-cols-3 gap-2 py-2"
-        role="list"
         aria-label="Diplomas list"
       >
         {diplomas.map((diploma) => (
-          <Link
-            key={diploma.id}
-            href={`/${diploma.id}`}
-            className="relative flex justify-center h-96"
-            aria-label={`View diploma ${diploma.title}`}
-          >
-            <Image
-              src={normalizeImageUrl(diploma.image)}
-              width={400}
-              height={400}
-              alt={`Diploma image for ${diploma.title}`}
-              className="w-full h-full object-fill"
-            />
-
-            <div
-              className="flex absolute flex-col text-white p-5 w-11/12 bottom-3 bg-[rgba(21,93,252,0.75)] shadow text-xl font-medium justify-center transition-all duration-300 max-h-24 overflow-hidden hover:max-h-96"
-              role="group"
-              aria-label={`Diploma details for ${diploma.title}`}
+          <li key={diploma.id}>
+            <Link
+              href={`/${diploma.id}`}
+              className="group relative flex justify-center h-96 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             >
-              {/* Title */}
-              <div>{diploma.title}</div>
+              <Image
+                src={normalizeImageUrl(diploma.image)}
+                width={400}
+                height={400}
+                alt=""
+                className="w-full h-full object-fill"
+              />
 
-              {/* Description */}
-              <p className="line-clamp-2 text-base mt-2 text-zinc-300">
-                {diploma.description}
-              </p>
-            </div>
-          </Link>
+              <div className="flex absolute flex-col text-white p-5 w-11/12 bottom-3 bg-[rgba(21,93,252,0.75)] shadow text-xl font-medium justify-center transition-all duration-300 max-h-24 overflow-hidden hover:max-h-96 group-focus-within:max-h-96">
+                {/* Title */}
+                <div>{diploma.title}</div>
+
+                {/* Description */}
+                <p className="line-clamp-2 text-base mt-2 text-zinc-300">
+                  {diploma.description}
+                </p>
+              </div>
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </InfiniteScroll>
   );
 }

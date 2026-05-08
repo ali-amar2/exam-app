@@ -12,6 +12,7 @@ import QuestionsTimerChart from "./questions-timer";
 import { cn } from "@/lib/utils/tailwind-merge";
 import { Answer, Question, QuestionsPayload } from "@/lib/types/question";
 import clsx from "clsx";
+import { useExam } from "@/hooks/use-exam";
 
 interface Props {
   initialData: QuestionsPayload;
@@ -21,13 +22,13 @@ interface Props {
 export default function QuestionView({ initialData, examId }: Props) {
   // Hooks
   const { mutate, isPending } = useSubmitExam();
+  const { data } = useExam(examId);
 
   // States
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [result, setResult] = useState<any>(null);
-  const [startedAt] = useState(() => new Date().toISOString());
-
+  const [startedAt, setStartedAt] = useState(() => new Date().toISOString());
   // Refs
   const hasSubmittedRef = useRef(false);
 
@@ -65,11 +66,14 @@ export default function QuestionView({ initialData, examId }: Props) {
   }, [questions.length]);
 
   const handleRestart = useCallback(() => {
+    localStorage.removeItem(`exam_start_time_${examId}`);
+    setStartedAt(new Date().toISOString());
+
     setCurrentIndex(0);
     setAnswers({});
     setResult(null);
     hasSubmittedRef.current = false;
-  }, []);
+  }, [examId]);
 
   const onAnswerChange = useCallback(
     (value: string) => {
@@ -93,7 +97,6 @@ export default function QuestionView({ initialData, examId }: Props) {
       { examId, startedAt, answers: formattedAnswers },
       {
         onSuccess: (data) => setResult(data),
-        onError: (err: any) => alert(err.message),
       },
     );
   }, [answers, examId, mutate, questions, startedAt, getFallbackAnswer]);
@@ -131,11 +134,13 @@ export default function QuestionView({ initialData, examId }: Props) {
           </div>
 
           <div className="bg-slate-50 p-2 rounded-xl mx-auto sm:mx-0 ">
-            <QuestionsTimerChart
-              examId={examId}
-              durationMinutes={10}
-              onTimeEnd={() => !isPending && handleSubmit()}
-            />
+            {data?.payload?.exam?.duration && (
+              <QuestionsTimerChart
+                examId={examId}
+                durationMinutes={data.payload.exam.duration}
+                onTimeEnd={() => !isPending && handleSubmit()}
+              />
+            )}
           </div>
         </div>
 

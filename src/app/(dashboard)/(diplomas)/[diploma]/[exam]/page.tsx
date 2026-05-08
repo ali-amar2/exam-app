@@ -16,6 +16,7 @@ interface PageProps {
 }
 export default async function Page({ params }: PageProps) {
   const data = await getExamQuestions(params.exam);
+
   return (
     <main>
       <Title
