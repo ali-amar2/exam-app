@@ -9,6 +9,9 @@ import { getUserProfile } from "@/lib/services/user-profile.service";
 export default async function Sidebar() {
   // variables
   const userData = await getUserProfile();
+
+  if (!userData) return null;
+
   const imageSrc = userData?.profilePhoto || user;
 
   return (
