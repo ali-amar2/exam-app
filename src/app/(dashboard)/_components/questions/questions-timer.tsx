@@ -89,7 +89,15 @@ export default function QuestionsTimerChart({
   }, [examId, totalSeconds, onTimeEnd]);
 
   if (timeLeft === null) {
-    return <div className="w-20 h-20 text-xs text-gray-400">--</div>;
+    return (
+      <div
+        className="w-20 h-20 text-xs text-gray-400"
+        role="status"
+        aria-live="polite"
+      >
+        --
+      </div>
+    );
   }
 
   // variables
@@ -98,7 +106,12 @@ export default function QuestionsTimerChart({
   const seconds = timeLeft % 60;
 
   return (
-    <div className="relative w-20 h-20">
+    <div
+      className="relative w-20 h-20"
+      role="timer"
+      aria-live="polite"
+      aria-label={`Time remaining ${minutes} minutes and ${seconds} seconds`}
+    >
       <PieChart width={80} height={80}>
         <Pie
           data={[
@@ -109,6 +122,7 @@ export default function QuestionsTimerChart({
           innerRadius={30}
           outerRadius={38}
           strokeWidth={0}
+          isAnimationActive={false}
         />
       </PieChart>
 

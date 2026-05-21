@@ -29,18 +29,23 @@ export default function QuestionView({ initialData, examId }: Props) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [result, setResult] = useState<any>(null);
   const [startedAt, setStartedAt] = useState(() => new Date().toISOString());
+
   // Refs
   const hasSubmittedRef = useRef(false);
 
   // variables
   const questions = initialData?.questions ?? [];
+
   const currentQuestion = useMemo(() => {
     return questions[currentIndex];
   }, [questions, currentIndex]);
+
   const isLastQuestion = currentIndex === questions.length - 1;
+
   const progress = useMemo(() => {
     return questions.length ? ((currentIndex + 1) / questions.length) * 100 : 0;
   }, [currentIndex, questions.length]);
+
   const currentAnswer = useMemo(() => {
     return currentQuestion ? (answers[currentQuestion.id] ?? "") : "";
   }, [answers, currentQuestion]);
@@ -78,6 +83,7 @@ export default function QuestionView({ initialData, examId }: Props) {
   const onAnswerChange = useCallback(
     (value: string) => {
       if (!currentQuestion) return;
+
       handleAnswer(currentQuestion.id, value);
     },
     [currentQuestion, handleAnswer],
@@ -86,6 +92,7 @@ export default function QuestionView({ initialData, examId }: Props) {
   // Submit Handler
   const handleSubmit = useCallback(() => {
     if (hasSubmittedRef.current) return;
+
     hasSubmittedRef.current = true;
 
     const formattedAnswers = questions.map((q: Question) => ({
@@ -103,7 +110,11 @@ export default function QuestionView({ initialData, examId }: Props) {
 
   if (!questions.length) {
     return (
-      <div className="text-center p-10 text-red-600">
+      <div
+        className="text-center p-10 text-red-600"
+        role="status"
+        aria-live="polite"
+      >
         No questions available For This Exam.
       </div>
     );
@@ -174,6 +185,7 @@ export default function QuestionView({ initialData, examId }: Props) {
               return (
                 <Label
                   key={a.id}
+                  htmlFor={a.id}
                   className={cn(
                     "flex items-center gap-4 p-5 border-2 rounded-2xl cursor-pointer transition",
                     isSelected
@@ -181,7 +193,8 @@ export default function QuestionView({ initialData, examId }: Props) {
                       : "border-slate-100 bg-white hover:bg-slate-50",
                   )}
                 >
-                  <RadioGroupItem value={a.id} />
+                  <RadioGroupItem value={a.id} id={a.id} />
+
                   <p
                     className={clsx(
                       "leading-normal",
@@ -206,7 +219,7 @@ export default function QuestionView({ initialData, examId }: Props) {
           disabled={currentIndex === 0 || isPending}
           aria-label="Go to previous question"
         >
-          <ChevronLeft className="w-4 h-4 mr-2" />
+          <ChevronLeft className="w-4 h-4 mr-2" aria-hidden="true" />
           Previous
         </Button>
 
@@ -217,12 +230,12 @@ export default function QuestionView({ initialData, examId }: Props) {
           aria-label={isLastQuestion ? "Submit exam" : "Go to next question"}
         >
           {isPending ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
+            <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
           ) : isLastQuestion ? (
             "Submit"
           ) : (
             <>
-              Next <ChevronRight className="w-4 h-4 ml-2" />
+              Next <ChevronRight className="w-4 h-4 ml-2" aria-hidden="true" />
             </>
           )}
         </Button>

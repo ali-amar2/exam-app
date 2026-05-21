@@ -12,6 +12,7 @@ interface ExamResultProps {
   result: ResultExam;
   onRestart: () => void;
 }
+
 export default function ExamResult({ result, onRestart }: ExamResultProps) {
   // variables
   const data = result?.submission;
@@ -29,11 +30,13 @@ export default function ExamResult({ result, onRestart }: ExamResultProps) {
           <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
             Exam Analysis
           </h2>
+
           <p className="text-slate-500 text-sm mt-1">
             Review your performance and detailed answers below.
           </p>
         </div>
       </header>
+
       <main className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         {/* Performance Scorecard */}
         <aside className="lg:col-span-4 top-6">
@@ -47,17 +50,24 @@ export default function ExamResult({ result, onRestart }: ExamResultProps) {
         </aside>
 
         {/* Answer Key & Breakdown */}
-        <section className="lg:col-span-8 flex flex-col gap-4">
+        <section
+          className="lg:col-span-8 flex flex-col gap-4"
+          aria-labelledby="question-breakdown"
+        >
           <div className="flex items-center gap-2 mb-2 text-slate-400">
-            <Info className="w-4 h-4" />
-            <span className="text-xs font-medium uppercase tracking-widest">
+            <Info className="w-4 h-4" aria-hidden="true" />
+
+            <span
+              id="question-breakdown"
+              className="text-xs font-medium uppercase tracking-widest"
+            >
               Question Breakdown
             </span>
           </div>
 
           <div className="space-y-4 max-h-[550px] overflow-y-auto pr-3 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
             {analytics.map((item: any, idx: number) => (
-              <div
+              <article
                 key={idx}
                 className={`group relative p-5 rounded-2xl border transition-all duration-300 ${
                   item.isCorrect
@@ -67,6 +77,7 @@ export default function ExamResult({ result, onRestart }: ExamResultProps) {
               >
                 {/* Visual indicator for correct/wrong on the card */}
                 <div
+                  aria-hidden="true"
                   className={`absolute left-0 top-0 bottom-0 w-1.5 rounded-l-2xl ${item.isCorrect ? "bg-emerald-400" : "bg-red-400"}`}
                 />
 
@@ -91,6 +102,7 @@ export default function ExamResult({ result, onRestart }: ExamResultProps) {
                         <span className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">
                           Your Answer
                         </span>
+
                         <span
                           className={`text-sm font-bold ${item.isCorrect ? "text-emerald-600" : "text-red-500"}`}
                         >
@@ -103,6 +115,7 @@ export default function ExamResult({ result, onRestart }: ExamResultProps) {
                           <span className="text-xs font-semibold text-emerald-600 uppercase tracking-tighter">
                             Correct Answer
                           </span>
+
                           <span className="text-sm font-bold text-emerald-700">
                             {item.correctAnswer?.text}
                           </span>
@@ -111,7 +124,7 @@ export default function ExamResult({ result, onRestart }: ExamResultProps) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </section>
@@ -124,11 +137,14 @@ export default function ExamResult({ result, onRestart }: ExamResultProps) {
           variant="outline"
           className="flex-1 h-14 border-slate-200 hover:bg-slate-50 hover:text-slate-900 text-slate-600 rounded-2xl font-bold transition-all shadow-sm active:scale-95"
         >
-          <RotateCcw className="w-5 h-5 mr-3" /> Restart Exam
+          <RotateCcw className="w-5 h-5 mr-3" aria-hidden="true" />
+          Restart Exam
         </Button>
+
         <Link href="/" className="flex-1">
           <Button className="w-full h-14 bg-blue-600 hover:bg-blue-700 text-white shadow-xl shadow-slate-200 rounded-2xl font-bold transition-all active:scale-95">
-            <FolderSearch className="w-5 h-5 mr-3" /> Explore
+            <FolderSearch className="w-5 h-5 mr-3" aria-hidden="true" />
+            Explore
           </Button>
         </Link>
       </footer>

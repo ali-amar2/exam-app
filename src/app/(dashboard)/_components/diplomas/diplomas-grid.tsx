@@ -27,7 +27,11 @@ export default function DiplomasGrid() {
 
   if (isError) {
     return (
-      <div className="flex items-center justify-center">
+      <div
+        className="flex items-center justify-center"
+        role="alert"
+        aria-live="assertive"
+      >
         <p className="text-center py-4 mt-5 text-red-500">
           Error loading diplomas
         </p>
@@ -41,7 +45,7 @@ export default function DiplomasGrid() {
       next={fetchNextPage}
       hasMore={!!hasNextPage}
       loader={
-        <div className="py-4 flex justify-center">
+        <div className="py-4 flex justify-center" aria-live="polite">
           <Loading />
         </div>
       }
@@ -63,13 +67,15 @@ export default function DiplomasGrid() {
           <li key={diploma.id}>
             <Link
               href={`/${diploma.id}`}
-              className="group relative flex justify-center h-96 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              aria-label={`View ${diploma.title} diploma`}
+              className="group relative flex justify-center h-96 "
             >
               <Image
                 src={normalizeImageUrl(diploma.image)}
                 width={400}
                 height={400}
-                alt=""
+                alt={diploma.title}
+                sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 50vw, 33vw"
                 className="w-full h-full object-fill"
               />
 

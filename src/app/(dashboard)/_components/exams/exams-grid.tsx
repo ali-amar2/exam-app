@@ -14,7 +14,11 @@ export default async function ExamsGrid({ diplomaId }: { diplomaId: string }) {
 
   if (exams.length === 0) {
     return (
-      <div className="flex justify-center items-center text-center py-10 text-red-500">
+      <div
+        className="flex justify-center items-center text-center py-10 text-red-500"
+        role="status"
+        aria-live="polite"
+      >
         No exams found for this diploma
       </div>
     );
@@ -26,6 +30,7 @@ export default async function ExamsGrid({ diplomaId }: { diplomaId: string }) {
         <Link
           href={`/${diplomaId}/${exam.id}`}
           key={exam.id}
+          aria-label={`Open ${exam.title} exam`}
           className=" flex flex-col sm:flex-row justify-betweenw-full bg-blue-50 border border-transparent hover:border-blue-300 rounded-lg p-3 sm:p-4 shadow-sm transition-all duration-300 gap-4 sm:gap-0"
         >
           {/* Image */}
@@ -37,6 +42,7 @@ export default async function ExamsGrid({ diplomaId }: { diplomaId: string }) {
               alt={exam.title}
               className="w-full h-full object-contain"
               loading="lazy"
+              sizes="(max-width: 640px) 100vw, 112px"
             />
           </div>
 
@@ -46,13 +52,15 @@ export default async function ExamsGrid({ diplomaId }: { diplomaId: string }) {
               <h2 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-blue-600 ">
                 {exam.title}
               </h2>
+
               <div className=" flex flex-wrap gap-2 sm:gap-3 font-bold text-zinc-500 text-xs sm:text-sm">
                 <span className="flex items-center gap-2">
-                  <CircleQuestionMark size={16} />
+                  <CircleQuestionMark size={16} aria-hidden="true" />
                   {exam.questionsCount} Questions
                 </span>
+
                 <span className="flex items-center gap-2">
-                  <Timer size={16} />
+                  <Timer size={16} aria-hidden="true" />
                   {exam.duration} minutes
                 </span>
               </div>
@@ -65,7 +73,14 @@ export default async function ExamsGrid({ diplomaId }: { diplomaId: string }) {
           </div>
         </Link>
       ))}
-      <span className="text-gray-500 m-auto text-sm">End of list</span>
+
+      <span
+        className="text-gray-500 m-auto text-sm"
+        role="status"
+        aria-live="polite"
+      >
+        End of list
+      </span>
     </section>
   );
 }
