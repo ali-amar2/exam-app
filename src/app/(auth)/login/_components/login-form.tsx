@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import ErrorBox from "@/components/ui/error-box";
 import {
@@ -50,6 +51,7 @@ export default function LoginForm() {
         <form
           className="flex flex-col gap-4 w-full"
           onSubmit={form.handleSubmit(onsubmit)}
+          noValidate
         >
           {/* Username */}
           <FormField
@@ -57,15 +59,22 @@ export default function LoginForm() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel htmlFor="username">Username</FormLabel>
+
                 <FormControl>
                   <Input
                     {...field}
-                    autoComplete="new-username"
+                    id="username"
+                    autoComplete="username"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
                     placeholder="ali123"
+                    aria-invalid={!!form.formState.errors.username}
                     error={!!form.formState.errors.username}
                   />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -77,14 +86,19 @@ export default function LoginForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel htmlFor="password">Password</FormLabel>
+
                 <FormControl>
                   <PasswordInput
                     {...field}
+                    id="password"
+                    autoComplete="current-password"
                     placeholder="********"
+                    aria-invalid={!!form.formState.errors.password}
                     error={!!form.formState.errors.password}
                   />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -93,8 +107,8 @@ export default function LoginForm() {
           {/* Forgot password link */}
           <div className="flex justify-end">
             <Link
-              href={"/forgot-password"}
-              className="text-blue-600 font-medium"
+              href="/forgot-password"
+              className="text-blue-600 font-medium underline-offset-4 hover:underline"
             >
               Forgot your password?
             </Link>
@@ -106,7 +120,11 @@ export default function LoginForm() {
           {/* Submit button */}
           <Button disabled={isPending} type="submit" className="my-4">
             {isPending ? (
-              <Loader className="animate-spin mr-2" size={16} />
+              <Loader
+                className="animate-spin mr-2"
+                size={16}
+                aria-hidden="true"
+              />
             ) : (
               "Login"
             )}

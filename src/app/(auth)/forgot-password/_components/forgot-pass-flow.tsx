@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ForgetPassword from "./forgot-pass";
 import PasswordSent from "./PasswordSent";
 import { useSearchParams } from "next/navigation";
@@ -14,11 +14,12 @@ export default function ForgotPasswordFlow() {
 
   // Search params
   const searchParams = useSearchParams();
-  const token = searchParams.get("token") || "";
+
+  const token = useMemo(() => searchParams.get("token") || "", [searchParams]);
 
   return (
-    <div className="flex flex-col gap-5 justify-center w-full items-center px-16 min-h-screen">
-      {step === "email" && (
+    <main className="flex flex-col gap-5 justify-center w-full items-center px-16 min-h-screen">
+      {step === "email" && !token && (
         <ForgetPassword
           onSuccess={(emailValue: string) => {
             setEmail(emailValue);
@@ -27,18 +28,24 @@ export default function ForgotPasswordFlow() {
         />
       )}
 
-      {step === "link" && (
+      {step === "link" && !token && (
         <PasswordSent email={email} onBack={() => setStep("email")} />
       )}
 
       {token && <SetNewPass token={token} />}
 
-      <div className="flex gap-2 justify-center flex-wrap mt-5">
-        <p>Don’t have an account? </p>
-        <Link href={"/register"} className="text-blue-600 font-medium">
-          Create yours
-        </Link>
-      </div>
-    </div>
+      {!token && (
+        <div className="flex gap-2 justify-center flex-wrap mt-5">
+          <p>Don’t have an account?</p>
+
+          <Link
+            href="/register"
+            className="text-blue-600 font-medium underline-offset-4 hover:underline"
+          >
+            Create yours
+          </Link>
+        </div>
+      )}
+    </main>
   );
 }

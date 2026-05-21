@@ -23,6 +23,7 @@ export default function ForgetPassword({
   onSuccess: (email: string) => void;
 }) {
   const { mutate, isPending, error } = useForgetpass();
+
   // Initialize react-hook-form with default values and Zod validation
   const form = useForm<forgetPassValues>({
     defaultValues: {
@@ -46,6 +47,7 @@ export default function ForgetPassword({
         {/* Title and description */}
         <div className="flex flex-col gap-2">
           <h1 className="font-inter font-bold text-2xl">Forgot Password</h1>
+
           <p className="text-gray-500">
             Don’t worry, we will help you recover your account.
           </p>
@@ -55,6 +57,7 @@ export default function ForgetPassword({
           <form
             onSubmit={form.handleSubmit(onsubmit)}
             className="flex flex-col gap-8"
+            noValidate
           >
             {/* Email input field */}
             <FormField
@@ -62,15 +65,21 @@ export default function ForgetPassword({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel htmlFor="email">Email</FormLabel>
+
                   <FormControl>
                     <Input
                       {...field}
+                      id="email"
                       type="email"
+                      inputMode="email"
+                      autoComplete="email"
                       placeholder="user@example.com"
+                      aria-invalid={!!form.formState.errors.email}
                       error={!!form.formState.errors.email}
                     />
                   </FormControl>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -81,7 +90,8 @@ export default function ForgetPassword({
 
             {/* Submit button */}
             <Button type="submit" disabled={isPending}>
-              Continue <ArrowRight />
+              Continue
+              <ArrowRight aria-hidden="true" />
             </Button>
           </form>
         </Form>

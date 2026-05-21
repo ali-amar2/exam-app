@@ -20,7 +20,7 @@ export default function RegisterFlow() {
 
   return (
     <main className="flex justify-center items-center w-full py-10 h-full">
-      <div className="w-full flex justify-center items-center flex-col">
+      <section className="w-full flex justify-center items-center flex-col">
         {step === "form" && (
           <div className="w-full px-8 md:px-28 lg:px-14">
             <h1 className="font-bold text-3xl mb-5">Create Account</h1>
@@ -31,9 +31,13 @@ export default function RegisterFlow() {
               onSubmit={handleSubmitEmail}
             />
 
-            <div className="flex gap-2 justify-center">
+            <div className="flex gap-2 justify-center flex-wrap">
               <p>Already have an account?</p>
-              <Link href="/login" className="text-blue-600">
+
+              <Link
+                href="/login"
+                className="text-blue-600 underline-offset-4 hover:underline"
+              >
                 Login
               </Link>
             </div>
@@ -50,7 +54,7 @@ export default function RegisterFlow() {
             error={error || undefined}
           />
         )}
-      </div>
+      </section>
     </main>
   );
 }

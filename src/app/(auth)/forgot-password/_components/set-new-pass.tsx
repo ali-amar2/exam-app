@@ -48,7 +48,11 @@ export default function SetNewPass({ token }: SetNewPassProps) {
       { ...values, token },
       {
         onSuccess: () => {
-          toast({ title: "Password updated successfully", duration: 3000 });
+          toast({
+            title: "Password updated successfully",
+            duration: 3000,
+          });
+
           router.replace("/login");
         },
       },
@@ -59,6 +63,7 @@ export default function SetNewPass({ token }: SetNewPassProps) {
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold">Create a New Password</h1>
+
         <p className="text-gray-500">
           Create a new strong password for your account.
         </p>
@@ -68,6 +73,7 @@ export default function SetNewPass({ token }: SetNewPassProps) {
         <form
           className="flex flex-col gap-7"
           onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
         >
           {/* Password input  */}
           <FormField
@@ -75,33 +81,45 @@ export default function SetNewPass({ token }: SetNewPassProps) {
             name="newPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>New Password</FormLabel>
+                <FormLabel htmlFor="newPassword">New Password</FormLabel>
+
                 <FormControl>
                   <PasswordInput
                     {...field}
+                    id="newPassword"
                     placeholder="********"
                     autoComplete="new-password"
+                    aria-invalid={!!form.formState.errors.newPassword}
                     error={!!form.formState.errors.newPassword}
                   />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
           />
+
           {/* Confirm Password input  */}
           <FormField
             control={form.control}
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
+                <FormLabel htmlFor="confirmPassword">
+                  Confirm Password
+                </FormLabel>
+
                 <FormControl>
                   <PasswordInput
                     {...field}
+                    id="confirmPassword"
                     placeholder="********"
+                    autoComplete="new-password"
+                    aria-invalid={!!form.formState.errors.confirmPassword}
                     error={!!form.formState.errors.confirmPassword}
                   />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}

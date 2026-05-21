@@ -1,6 +1,6 @@
 "use client";
+
 import { MoveLeft } from "lucide-react";
-import Link from "next/link";
 
 interface PasswordSentProps {
   email: string;
@@ -12,13 +12,16 @@ export default function PasswordSent({ email, onBack }: PasswordSentProps) {
     <div>
       {/* Back arrow */}
       {onBack && (
-        <div
+        <button
+          type="button"
+          aria-label="Go back"
           className="border border-gray-400 w-fit p-1 mb-3 cursor-pointer"
           onClick={onBack}
         >
-          <MoveLeft />
-        </div>
+          <MoveLeft aria-hidden="true" />
+        </button>
       )}
+
       <div className="flex flex-col gap-7 w-full justify-center items-center">
         {/* Title and description */}
         <div className="flex flex-col gap-2 w-full">
@@ -29,8 +32,11 @@ export default function PasswordSent({ email, onBack }: PasswordSentProps) {
           <div className="flex flex-col gap-5">
             <p>
               We have sent a password reset link to:
-              <span className="block text-blue-600 font-medium">{email}</span>
+              <span className="block text-blue-600 font-medium break-all">
+                {email}
+              </span>
             </p>
+
             <p>
               Please check your inbox and follow the instructions to reset your
               password.

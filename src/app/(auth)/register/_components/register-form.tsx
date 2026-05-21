@@ -53,6 +53,7 @@ export default function RegisterForm({
       <form
         className="flex flex-col gap-1 w-full"
         onSubmit={form.handleSubmit(handleSubmit)}
+        noValidate
       >
         {/* First & Last Name */}
         <div className="flex gap-4">
@@ -61,14 +62,19 @@ export default function RegisterForm({
             name="firstName"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>First name</FormLabel>
+                <FormLabel htmlFor="firstName">First name</FormLabel>
+
                 <FormControl>
                   <Input
                     {...field}
+                    id="firstName"
+                    autoComplete="given-name"
                     placeholder="Ali"
+                    aria-invalid={!!form.formState.errors.firstName}
                     error={!!form.formState.errors.firstName}
                   />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -79,14 +85,19 @@ export default function RegisterForm({
             name="lastName"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Last name</FormLabel>
+                <FormLabel htmlFor="lastName">Last name</FormLabel>
+
                 <FormControl>
                   <Input
                     {...field}
+                    id="lastName"
+                    autoComplete="family-name"
                     placeholder="Ammar"
+                    aria-invalid={!!form.formState.errors.lastName}
                     error={!!form.formState.errors.lastName}
                   />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -99,15 +110,22 @@ export default function RegisterForm({
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel htmlFor="username">Username</FormLabel>
+
               <FormControl>
                 <Input
                   {...field}
-                  autoComplete="new-username"
+                  id="username"
+                  autoComplete="username"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   placeholder="ali123"
+                  aria-invalid={!!form.formState.errors.username}
                   error={!!form.formState.errors.username}
                 />
               </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
@@ -119,15 +137,21 @@ export default function RegisterForm({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel htmlFor="email">Email</FormLabel>
+
               <FormControl>
                 <Input
                   {...field}
+                  id="email"
                   type="email"
+                  inputMode="email"
+                  autoComplete="email"
                   placeholder="user@example.com"
+                  aria-invalid={!!form.formState.errors.email}
                   error={!!form.formState.errors.email}
                 />
               </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
@@ -139,10 +163,13 @@ export default function RegisterForm({
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Phone</FormLabel>
+              <FormLabel htmlFor="phone">Phone</FormLabel>
+
               <FormControl>
                 <PhoneInput
                   {...field}
+                  id="phone"
+                  autoComplete="tel"
                   value={field.value || ""}
                   onChange={(value) => field.onChange(value ?? "")}
                   defaultCountry="EG"
@@ -154,8 +181,10 @@ export default function RegisterForm({
                       : ""
                   }
                   placeholder="Enter phone number"
+                  aria-invalid={!!form.formState.errors.phone}
                 />
               </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
@@ -167,15 +196,19 @@ export default function RegisterForm({
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel htmlFor="password">Password</FormLabel>
+
               <FormControl>
                 <PasswordInput
                   {...field}
+                  id="password"
                   autoComplete="new-password"
                   placeholder="********"
+                  aria-invalid={!!form.formState.errors.password}
                   error={!!form.formState.errors.password}
                 />
               </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
@@ -187,14 +220,19 @@ export default function RegisterForm({
           name="confirmPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
+
               <FormControl>
                 <PasswordInput
                   {...field}
+                  id="confirmPassword"
+                  autoComplete="new-password"
                   placeholder="********"
+                  aria-invalid={!!form.formState.errors.confirmPassword}
                   error={!!form.formState.errors.confirmPassword}
                 />
               </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
@@ -206,7 +244,11 @@ export default function RegisterForm({
         {/* Submit Button*/}
         <Button disabled={isPending} type="submit" className="my-4">
           {isPending ? (
-            <Loader className="animate-spin mr-2" size={16} />
+            <Loader
+              className="animate-spin mr-2"
+              size={16}
+              aria-hidden="true"
+            />
           ) : (
             "Create Account"
           )}
